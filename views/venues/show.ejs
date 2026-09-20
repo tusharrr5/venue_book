@@ -14,47 +14,61 @@
     <%- include('../partials/flash') %>
 
     <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="mb-4">
+    <nav aria-label="breadcrumb" class="mb-4 animate-fade-in">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-muted">Home</a></li>
-        <li class="breadcrumb-item"><a href="/venues" class="text-decoration-none text-muted">Venues</a></li>
-        <li class="breadcrumb-item active" aria-current="page"><%= venue.name %></li>
+        <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-muted hover-lift">Home</a></li>
+        <li class="breadcrumb-item"><a href="/venues" class="text-decoration-none text-muted hover-lift">Venues</a></li>
+        <li class="breadcrumb-item active fw-medium" aria-current="page"><%= venue.name %></li>
       </ol>
     </nav>
 
     <div class="row g-4">
       <!-- Venue Main Info -->
-      <div class="col-lg-8">
-        <div class="card card-custom overflow-hidden border-0 shadow-sm mb-4">
-          <img
-            src="<%= venue.imageUrl %>"
-            alt="<%= venue.name %>"
-            style="height: 380px; width: 100%; object-fit: cover;"
-            onerror="this.src='https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1200&q=80'"
-          >
-          <div class="p-4 p-md-5">
-            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-              <div>
-                <h1 class="fw-bold text-dark mb-1"><%= venue.name %></h1>
-                <p class="text-muted mb-0">📍 <%= venue.location %></p>
+      <div class="col-lg-8 animate-fade-in-up">
+        <div class="card card-custom overflow-hidden border-0 shadow-sm mb-4" style="border-radius: var(--radius-xl);">
+          <div class="position-relative">
+            <img
+              src="<%= venue.imageUrl %>"
+              alt="<%= venue.name %>"
+              style="height: 420px; width: 100%; object-fit: cover;"
+              onerror="this.src='https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1200&q=80'"
+            >
+            <!-- Gradient Overlay for Image -->
+            <div class="position-absolute bottom-0 start-0 w-100" style="height: 150px; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);"></div>
+            <div class="position-absolute bottom-0 start-0 p-4 p-md-5 w-100 text-white">
+              <div class="d-flex flex-wrap justify-content-between align-items-end gap-3">
+                <div>
+                  <span class="badge bg-white text-dark mb-3 shadow-sm px-3 py-2 rounded-pill fw-bold" style="font-size: 0.75rem;">
+                    📍 <%= venue.location %>
+                  </span>
+                  <h1 class="fw-bold mb-0" style="font-size: 2.5rem; text-shadow: 0 2px 10px rgba(0,0,0,0.3);"><%= venue.name %></h1>
+                </div>
+                <span class="badge badge-status <%= venue.status === 'active' ? 'badge-active' : 'badge-inactive' %> fs-6 px-4 py-2 shadow-sm border-0" style="background: <%= venue.status === 'active' ? 'rgba(16, 185, 129, 0.9)' : 'rgba(239, 68, 68, 0.9)' %>; color: white;">
+                  <%= venue.status %>
+                </span>
               </div>
-              <span class="badge badge-status <%= venue.status === 'active' ? 'badge-active' : 'badge-inactive' %> fs-6 px-3 py-2">
-                <%= venue.status %>
-              </span>
             </div>
-
-            <hr class="my-4">
-
-            <h5 class="fw-bold text-dark mb-3">About This Venue</h5>
-            <p class="text-muted" style="line-height: 1.7;">
+          </div>
+          
+          <div class="p-4 p-md-5 bg-white">
+            <h5 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+              <svg width="24" height="24" fill="none" stroke="var(--color-primary)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              About This Venue
+            </h5>
+            <p class="text-muted" style="line-height: 1.8; font-size: 1.05rem;">
               <%= venue.description %>
             </p>
 
-            <h5 class="fw-bold text-dark mt-4 mb-3">Available Facilities & Equipment</h5>
-            <div class="d-flex flex-wrap gap-2">
+            <hr class="my-5 border-light">
+
+            <h5 class="fw-bold text-dark mb-4 d-flex align-items-center gap-2">
+              <svg width="24" height="24" fill="none" stroke="var(--color-primary)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+              Available Facilities & Equipment
+            </h5>
+            <div class="d-flex flex-wrap gap-3">
               <% (venue.facilities || []).forEach(function(facility) { %>
-                <span class="facility-pill py-2 px-3 fs-6">
-                  <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20" class="text-success">
+                <span class="facility-pill py-2 px-3 fs-6 d-flex align-items-center gap-2 shadow-sm" style="border-radius: var(--radius-md);">
+                  <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20" class="text-primary">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                   </svg>
                   <%= facility %>
@@ -65,7 +79,7 @@
         </div>
 
         <!-- Schedule / Availability Checker -->
-        <div class="card card-custom p-4 border-0 shadow-sm">
+        <div class="card card-custom p-4 p-md-5 border-0 shadow-sm" style="border-radius: var(--radius-xl);">
           <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
             <div>
               <h5 class="fw-bold text-dark mb-1">Schedule & Availability</h5>
@@ -76,23 +90,22 @@
               <input
                 type="date"
                 name="date"
-                class="form-control form-control-sm"
+                class="form-control"
                 value="<%= selectedDate %>"
                 onchange="this.form.submit()"
+                style="min-width: 160px;"
               >
             </form>
           </div>
 
-          <div class="p-3 bg-light rounded-3 mb-3">
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="fw-semibold text-dark">Schedule for: <strong><%= formatDateDisplay(selectedDate) %></strong></span>
-              <span class="badge bg-secondary-subtle text-secondary small">Operating Hours: 08:00 - 22:00</span>
-            </div>
+          <div class="p-3 rounded-3 mb-4 d-flex justify-content-between align-items-center" style="background: var(--color-primary-light); border: 1px solid var(--color-primary-glow);">
+            <span class="fw-semibold text-primary">Schedule for: <strong class="text-dark ms-1"><%= formatDateDisplay(selectedDate) %></strong></span>
+            <span class="badge bg-white text-primary border border-primary-subtle shadow-sm px-3 py-2 rounded-pill">08:00 - 22:00</span>
           </div>
 
           <% if (schedule && schedule.length > 0) { %>
             <div class="table-responsive">
-              <table class="table table-custom">
+              <table class="table table-custom align-middle">
                 <thead>
                   <tr>
                     <th>Time Interval</th>
@@ -103,78 +116,103 @@
                 <tbody>
                   <% schedule.forEach(function(item) { %>
                     <tr>
-                      <td class="fw-semibold"><%= item.startTime %> – <%= item.endTime %></td>
+                      <td class="fw-bold text-dark"><%= item.startTime %> – <%= item.endTime %></td>
                       <td>
-                        <span class="badge <%= item.type === 'maintenance' ? 'bg-warning text-dark' : 'bg-danger text-white' %> rounded-pill px-2.5 py-1">
+                        <span class="badge <%= item.type === 'maintenance' ? 'bg-warning-subtle text-warning border border-warning' : 'bg-danger-subtle text-danger border border-danger' %> rounded-pill px-3 py-1.5 fw-semibold">
                           <%= item.label %>
                         </span>
                       </td>
-                      <td class="text-muted small">Slot Unavailable</td>
+                      <td class="text-muted small fw-medium d-flex align-items-center gap-1">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20" class="text-danger"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
+                        Unavailable
+                      </td>
                     </tr>
                   <% }); %>
                 </tbody>
               </table>
             </div>
-            <p class="text-muted small mt-2 mb-0">
-              * Note: To protect organiser privacy, specific event titles and host details are kept confidential.
+            <p class="text-muted small mt-3 mb-0 d-flex align-items-center gap-2">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+              Note: To protect organiser privacy, specific event titles and host details are kept confidential.
             </p>
           <% } else { %>
-            <div class="text-center py-4">
-              <div class="stat-icon success mx-auto mb-2" style="width: 48px; height: 48px; font-size: 1.25rem;">
+            <div class="text-center py-5 rounded-4 bg-light">
+              <div class="stat-icon success mx-auto mb-3" style="width: 64px; height: 64px; font-size: 1.5rem; background: var(--color-success-light);">
                 ✓
               </div>
-              <h6 class="fw-bold text-dark mb-1">Fully Available</h6>
-              <p class="text-muted small mb-0">There are no approved bookings or maintenance blocks scheduled on this date.</p>
+              <h5 class="fw-bold text-dark mb-2">Fully Available</h5>
+              <p class="text-muted small mb-0 max-w-400 mx-auto">There are no approved bookings or maintenance blocks scheduled on this date. The venue is completely free for reservations.</p>
             </div>
           <% } %>
         </div>
       </div>
 
       <!-- Booking Sidebar Card -->
-      <div class="col-lg-4">
-        <div class="card card-custom p-4 border-0 shadow-sm sticky-top" style="top: 90px;">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-muted small fw-semibold text-uppercase">Pricing & Booking</span>
-            <span class="badge bg-success-subtle text-success">Instant Request</span>
+      <div class="col-lg-4 animate-fade-in-up" style="animation-delay: 0.15s;">
+        <div class="card card-custom p-4 border-0 shadow-sm sticky-top" style="top: 90px; border-radius: var(--radius-xl);">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <span class="text-muted small fw-bold text-uppercase tracking-wider">Booking Info</span>
+            <span class="badge bg-success-subtle text-success border border-success px-2 py-1">Instant Request</span>
           </div>
 
-          <div class="mb-4">
-            <div class="display-6 fw-bold text-dark"><%= formatCurrency(venue.hourlyRate) %><span class="fs-6 text-muted fw-normal"> / hour</span></div>
+          <div class="mb-4 text-center pb-4 border-bottom">
+            <div class="fw-bold text-dark mb-1" style="font-size: 3rem; line-height: 1;"><%= formatCurrency(venue.hourlyRate) %><span class="fs-5 text-muted fw-normal">/hr</span></div>
             <p class="text-muted small mb-0">Standard campus reservation tariff</p>
           </div>
 
-          <div class="p-3 bg-light rounded-3 mb-4">
-            <div class="d-flex justify-content-between mb-2">
-              <span class="text-muted small">Maximum Capacity</span>
-              <span class="fw-bold text-dark small"><%= venue.capacity %> attendees</span>
+          <div class="d-flex flex-column gap-3 mb-4">
+            <div class="d-flex justify-content-between align-items-center p-3 rounded-3 bg-light">
+              <span class="text-muted small d-flex align-items-center gap-2">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                Max Capacity
+              </span>
+              <span class="fw-bold text-dark"><%= venue.capacity %> attendees</span>
             </div>
-            <div class="d-flex justify-content-between mb-2">
-              <span class="text-muted small">Operating Window</span>
-              <span class="fw-bold text-dark small">08:00 – 22:00</span>
+            
+            <div class="d-flex justify-content-between align-items-center p-3 rounded-3 bg-light">
+              <span class="text-muted small d-flex align-items-center gap-2">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Operating Window
+              </span>
+              <span class="fw-bold text-dark">08:00 – 22:00</span>
             </div>
-            <div class="d-flex justify-content-between">
-              <span class="text-muted small">Venue Status</span>
-              <span class="fw-bold text-<%= venue.status === 'active' ? 'success' : 'danger' %> small text-capitalize"><%= venue.status %></span>
+            
+            <div class="d-flex justify-content-between align-items-center p-3 rounded-3 bg-light">
+              <span class="text-muted small d-flex align-items-center gap-2">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Status
+              </span>
+              <span class="fw-bold text-<%= venue.status === 'active' ? 'success' : 'danger' %> text-capitalize">
+                <%= venue.status %>
+              </span>
             </div>
           </div>
 
           <% if (venue.status === 'active') { %>
-            <a href="/bookings/new/<%= venue._id %>?date=<%= selectedDate %>" class="btn btn-primary-custom w-100 py-3 fw-bold mb-2">
-              Request Booking For This Venue
+            <a href="/bookings/new/<%= venue._id %>?date=<%= selectedDate %>" class="btn btn-primary-custom w-100 py-3 fw-bold fs-6 mb-3 shadow-sm hover-lift rounded-3">
+              Request Booking
             </a>
           <% } else { %>
-            <button class="btn btn-secondary w-100 py-3 fw-bold mb-2" disabled>
-              Venue Inactive (Cannot Book)
+            <button class="btn btn-secondary w-100 py-3 fw-bold fs-6 mb-3 rounded-3" disabled>
+              Venue Inactive
             </button>
           <% } %>
 
-          <p class="text-muted text-center small mb-0">
-            Booking requests require venue admin approval. Overlaps are strictly prevented.
-          </p>
+          <div class="text-center p-3 rounded-3 border border-dashed border-2 bg-light">
+            <p class="text-muted small mb-0 d-flex align-items-start gap-2 text-start">
+              <svg width="20" height="20" fill="none" stroke="var(--color-primary)" viewBox="0 0 24 24" class="flex-shrink-0 mt-1"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              Booking requests require venue admin approval. Overlaps are strictly prevented by the system.
+            </p>
+          </div>
         </div>
       </div>
     </div>
   </main>
+
+  <style>
+    .tracking-wider { letter-spacing: 0.05em; }
+    .border-dashed { border-style: dashed !important; }
+  </style>
 
   <%- include('../partials/footer') %>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

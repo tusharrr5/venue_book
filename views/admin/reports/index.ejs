@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="/css/custom.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 admin-theme">
   <%- include('../../partials/navbar') %>
 
   <div class="container-fluid flex-grow-1">
@@ -17,63 +17,63 @@
         <%- include('../../partials/adminSidebar') %>
       </div>
 
-      <div class="col-lg-10 p-4 p-md-5">
+      <div class="col-lg-10 p-4 p-md-5 admin-content">
         <%- include('../../partials/flash') %>
 
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 animate-fade-in-up">
           <div>
-            <h1 class="fw-bold text-dark mb-1">Revenue & Space Utilisation Analytics</h1>
-            <p class="text-muted mb-0">Financial yield and venue efficiency metrics across campus facilities.</p>
+            <h1 class="fw-bold mb-1" style="font-size: 1.75rem;">Revenue & Space Utilisation Analytics</h1>
+            <p class="mb-0" style="color: var(--admin-text-muted);">Financial yield and venue efficiency metrics across campus facilities.</p>
           </div>
 
           <!-- Period Filter Selector -->
-          <div class="d-flex align-items-center gap-2">
-            <span class="text-muted small fw-semibold">Reporting Period:</span>
+          <div class="d-flex align-items-center gap-3 p-2 rounded-pill" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
+            <span class="small fw-semibold ps-2" style="color: var(--admin-text-muted);">Period:</span>
             <div class="btn-group btn-group-sm" role="group">
-              <a href="/admin/reports?days=7" class="btn <%= selectedDays === 7 ? 'btn-primary' : 'btn-outline-secondary' %>">7 Days</a>
-              <a href="/admin/reports?days=30" class="btn <%= selectedDays === 30 ? 'btn-primary' : 'btn-outline-secondary' %>">30 Days</a>
-              <a href="/admin/reports?days=90" class="btn <%= selectedDays === 90 ? 'btn-primary' : 'btn-outline-secondary' %>">90 Days</a>
+              <a href="/admin/reports?days=7" class="btn <%= selectedDays === 7 ? 'btn-primary-custom fw-bold' : 'btn-outline-custom' %> rounded-pill px-3">7 Days</a>
+              <a href="/admin/reports?days=30" class="btn <%= selectedDays === 30 ? 'btn-primary-custom fw-bold' : 'btn-outline-custom' %> rounded-pill px-3 mx-1">30 Days</a>
+              <a href="/admin/reports?days=90" class="btn <%= selectedDays === 90 ? 'btn-primary-custom fw-bold' : 'btn-outline-custom' %> rounded-pill px-3">90 Days</a>
             </div>
           </div>
         </div>
 
         <!-- KPI Summary Cards -->
-        <div class="row g-3 mb-4">
+        <div class="row g-3 mb-5 stagger-children">
           <div class="col-sm-6 col-xl-3">
-            <div class="stat-card">
-              <div class="stat-icon success">💰</div>
+            <div class="stat-card hover-lift" style="border-radius: var(--radius-xl);">
+              <div class="stat-icon" style="background: rgba(16,185,129,0.15); color: #6ee7b7;">💰</div>
               <div>
-                <div class="stat-value"><%= formatCurrency(revenue.totalRevenue) %></div>
+                <div class="stat-value" style="color: var(--admin-text);"><%= formatCurrency(revenue.totalRevenue) %></div>
                 <div class="stat-label">Total Revenue (Completed)</div>
               </div>
             </div>
           </div>
 
           <div class="col-sm-6 col-xl-3">
-            <div class="stat-card">
-              <div class="stat-icon primary">📈</div>
+            <div class="stat-card hover-lift" style="border-radius: var(--radius-xl);">
+              <div class="stat-icon" style="background: rgba(99,102,241,0.15); color: #818cf8;">📈</div>
               <div>
-                <div class="stat-value"><%= formatCurrency(revenue.monthRevenue) %></div>
+                <div class="stat-value" style="color: var(--admin-text);"><%= formatCurrency(revenue.monthRevenue) %></div>
                 <div class="stat-label">Revenue This Month</div>
               </div>
             </div>
           </div>
 
           <div class="col-sm-6 col-xl-3">
-            <div class="stat-card">
-              <div class="stat-icon info">⚡</div>
+            <div class="stat-card hover-lift" style="border-radius: var(--radius-xl);">
+              <div class="stat-icon" style="background: rgba(6,182,212,0.15); color: #67e8f9;">⚡</div>
               <div>
-                <div class="stat-value"><%= utilisation.overallUtilisation %>%</div>
+                <div class="stat-value" style="color: var(--admin-text);"><%= utilisation.overallUtilisation %>%</div>
                 <div class="stat-label">Campus Utilisation Rate</div>
               </div>
             </div>
           </div>
 
           <div class="col-sm-6 col-xl-3">
-            <div class="stat-card">
-              <div class="stat-icon warning">🕒</div>
+            <div class="stat-card hover-lift" style="border-radius: var(--radius-xl);">
+              <div class="stat-icon" style="background: rgba(245,158,11,0.15); color: #fcd34d;">🕒</div>
               <div>
-                <div class="stat-value"><%= utilisation.operatingHoursPerDay %>h / day</div>
+                <div class="stat-value" style="color: var(--admin-text);"><%= utilisation.operatingHoursPerDay %>h / day</div>
                 <div class="stat-label">Standard Operating Hours</div>
               </div>
             </div>
@@ -81,13 +81,13 @@
         </div>
 
         <!-- Section 1: Revenue Analytics -->
-        <div class="row g-4 mb-5">
+        <div class="row g-4 mb-5 animate-fade-in-up" style="animation-delay: 0.2s;">
           <!-- Chart -->
           <div class="col-lg-6">
-            <div class="card card-custom p-4 border-0 shadow-sm h-100">
-              <h5 class="fw-bold text-dark mb-1">Revenue Breakdown by Venue</h5>
-              <p class="text-muted small mb-3">Total earnings from completed events per venue</p>
-              <div style="height: 300px; position: relative;">
+            <div class="card card-custom p-4 border-0 shadow-sm h-100" style="border-radius: var(--radius-xl);">
+              <h5 class="fw-bold mb-1" style="color: var(--admin-text);">Revenue Breakdown by Venue</h5>
+              <p class="small mb-4" style="color: var(--admin-text-muted);">Total earnings from completed events per venue</p>
+              <div style="height: 320px; position: relative;">
                 <canvas id="revenueByVenueChart"></canvas>
               </div>
             </div>
@@ -95,10 +95,10 @@
 
           <!-- Revenue by Venue Table -->
           <div class="col-lg-6">
-            <div class="card card-custom border-0 shadow-sm h-100 overflow-hidden">
-              <div class="card-header bg-white border-bottom p-4">
-                <h5 class="fw-bold text-dark mb-0">Venue Revenue Summary</h5>
-                <small class="text-muted">Ranked by highest yielding campus spaces</small>
+            <div class="card card-custom border-0 shadow-sm h-100 overflow-hidden" style="border-radius: var(--radius-xl);">
+              <div class="p-4" style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <h5 class="fw-bold mb-0" style="color: var(--admin-text);">Venue Revenue Summary</h5>
+                <small style="color: var(--admin-text-muted);">Ranked by highest yielding campus spaces</small>
               </div>
               <div class="table-responsive">
                 <table class="table table-custom mb-0">
@@ -115,17 +115,17 @@
                       <% revenue.revenueByVenue.forEach(function(item) { %>
                         <tr>
                           <td>
-                            <div class="fw-bold text-dark"><%= item.venueName %></div>
-                            <small class="text-muted">📍 <%= item.location %></small>
+                            <div class="fw-bold"><%= item.venueName %></div>
+                            <small style="color: var(--admin-text-muted);">📍 <%= item.location %></small>
                           </td>
                           <td><strong><%= item.completedBookings %></strong></td>
                           <td><%= item.totalHours %> hrs</td>
-                          <td class="text-end fw-bold text-success"><%= formatCurrency(item.totalRevenue) %></td>
+                          <td class="text-end fw-bold" style="color: #4ade80;"><%= formatCurrency(item.totalRevenue) %></td>
                         </tr>
                       <% }); %>
                     <% } else { %>
                       <tr>
-                        <td colspan="4" class="text-center py-4 text-muted small">No completed events to calculate revenue.</td>
+                        <td colspan="4" class="text-center py-5 small" style="color: var(--admin-text-muted);">No completed events to calculate revenue.</td>
                       </tr>
                     <% } %>
                   </tbody>
@@ -136,30 +136,30 @@
         </div>
 
         <!-- Section 2: Venue Utilisation Analytics -->
-        <div class="card card-custom border-0 shadow-sm p-4 mb-4">
-          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+        <div class="card card-custom border-0 shadow-sm p-4 p-md-5 mb-4 animate-fade-in-up" style="animation-delay: 0.3s; border-radius: var(--radius-xl);">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
             <div>
-              <h4 class="fw-bold text-dark mb-1">Venue Utilisation Metrics</h4>
-              <p class="text-muted small mb-0">
-                Evaluation Period: <strong><%= selectedDays %> days</strong> | Formula:
-                <code>Utilisation % = (Completed/Approved Booked Hours ÷ Available Venue Hours) × 100</code>
+              <h4 class="fw-bold mb-2" style="color: var(--admin-text);">Venue Utilisation Metrics</h4>
+              <p class="small mb-0" style="color: var(--admin-text-muted);">
+                Evaluation Period: <strong style="color: var(--admin-text-secondary);"><%= selectedDays %> days</strong> | Formula:
+                <code class="px-2 py-1 rounded" style="background: rgba(255,255,255,0.05); color: #a5b4fc;">Utilisation % = (Booked Hours ÷ Available Hours) × 100</code>
               </p>
             </div>
           </div>
 
-          <div class="alert alert-light border small text-muted mb-4">
-            <strong>Documentation Note:</strong> Available hours are calculated using the campus operating window of <strong>14 hours per day (08:00 to 22:00)</strong> over <%= selectedDays %> days (= <%= selectedDays * 14 %> hours per venue). Booked hours represent approved and completed event reservations.
+          <div class="alert border-0 small mb-5 rounded-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05) !important; color: var(--admin-text-secondary);">
+            <strong class="text-white">Documentation Note:</strong> Available hours are calculated using the campus operating window of <strong class="text-white">14 hours per day (08:00 to 22:00)</strong> over <%= selectedDays %> days (= <%= selectedDays * 14 %> hours per venue). Booked hours represent approved and completed event reservations.
           </div>
 
-          <div class="row g-4 mb-4">
+          <div class="row g-4">
             <div class="col-lg-6">
-              <div style="height: 320px; position: relative;">
+              <div style="height: 350px; position: relative;">
                 <canvas id="venueUtilisationChart"></canvas>
               </div>
             </div>
 
             <div class="col-lg-6">
-              <div class="table-responsive">
+              <div class="table-responsive rounded-3" style="border: 1px solid rgba(255,255,255,0.05);">
                 <table class="table table-custom mb-0">
                   <thead>
                     <tr>
@@ -173,23 +173,23 @@
                     <% utilisation.venues.forEach(function(v) { %>
                       <tr>
                         <td>
-                          <div class="fw-bold text-dark"><%= v.venueName %></div>
-                          <small class="text-muted"><%= v.eventCount %> events</small>
+                          <div class="fw-bold"><%= v.venueName %></div>
+                          <small style="color: var(--admin-text-muted);"><%= v.eventCount %> events</small>
                         </td>
                         <td><%= v.bookedHours %> / <%= v.availableHours %> hrs</td>
                         <td>
-                          <div class="d-flex align-items-center gap-2">
-                            <div class="progress flex-grow-1" style="height: 8px;">
+                          <div class="d-flex align-items-center gap-3">
+                            <div class="progress flex-grow-1" style="height: 6px; background: rgba(255,255,255,0.05);">
                               <div
-                                class="progress-bar <%= v.utilisationPercent >= 70 ? 'bg-success' : v.utilisationPercent >= 35 ? 'bg-info' : 'bg-warning' %>"
+                                class="progress-bar rounded-pill <%= v.utilisationPercent >= 70 ? 'bg-success' : v.utilisationPercent >= 35 ? 'bg-info' : 'bg-warning' %>"
                                 role="progressbar"
-                                style="width: <%= v.utilisationPercent %>%;"
+                                style="width: <%= v.utilisationPercent %>%; box-shadow: 0 0 10px <%= v.utilisationPercent >= 70 ? 'rgba(16,185,129,0.5)' : v.utilisationPercent >= 35 ? 'rgba(6,182,212,0.5)' : 'rgba(245,158,11,0.5)' %>;"
                                 aria-valuenow="<%= v.utilisationPercent %>"
                                 aria-valuemin="0"
                                 aria-valuemax="100"
                               ></div>
                             </div>
-                            <span class="fw-bold small"><%= v.utilisationPercent %>%</span>
+                            <span class="fw-bold small" style="min-width: 35px;"><%= v.utilisationPercent %>%</span>
                           </div>
                         </td>
                         <td class="text-end">
@@ -213,6 +213,9 @@
     // Pass server data to client Chart.js script
     window.revenueData = <%- JSON.stringify(revenue.revenueByVenue) %>;
     window.utilisationData = <%- JSON.stringify(utilisation.venues) %>;
+    
+    // Notify charts.js to use dark theme defaults if in admin section
+    window.isDarkTheme = true;
   </script>
 
   <%- include('../../partials/footer') %>

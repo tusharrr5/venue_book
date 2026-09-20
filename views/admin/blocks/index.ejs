@@ -7,7 +7,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/css/custom.css">
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 admin-theme">
   <%- include('../../partials/navbar') %>
 
   <div class="container-fluid flex-grow-1">
@@ -16,16 +16,16 @@
         <%- include('../../partials/adminSidebar') %>
       </div>
 
-      <div class="col-lg-10 p-4 p-md-5">
+      <div class="col-lg-10 p-4 p-md-5 admin-content">
         <%- include('../../partials/flash') %>
 
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 animate-fade-in-up">
           <div>
-            <h1 class="fw-bold text-dark mb-1">Venue Maintenance Blocks</h1>
-            <p class="text-muted mb-0">Schedule downtime, repairs, renovations, or administrative blackouts across campus venues.</p>
+            <h1 class="fw-bold mb-1" style="font-size: 1.75rem;">Venue Maintenance Blocks</h1>
+            <p class="mb-0" style="color: var(--admin-text-muted);">Schedule downtime, repairs, renovations, or administrative blackouts across campus venues.</p>
           </div>
           <div>
-            <button type="button" class="btn btn-primary-custom d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#newBlockModal">
+            <button type="button" class="btn btn-primary-custom d-flex align-items-center gap-2 hover-lift" data-bs-toggle="modal" data-bs-target="#newBlockModal">
               <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
               Schedule Maintenance Block
             </button>
@@ -33,7 +33,7 @@
         </div>
 
         <!-- Blocks Table -->
-        <div class="card card-custom border-0 shadow-sm overflow-hidden">
+        <div class="card card-custom border-0 shadow-sm overflow-hidden animate-fade-in-up" style="animation-delay: 0.1s;">
           <% if (blocks && blocks.length > 0) { %>
             <div class="table-responsive">
               <table class="table table-custom mb-0">
@@ -51,27 +51,27 @@
                   <% blocks.forEach(function(b) { %>
                     <tr>
                       <td>
-                        <div class="fw-bold text-dark"><%= b.venue ? b.venue.name : 'Unknown Venue' %></div>
-                        <small class="text-muted">📍 <%= b.venue ? b.venue.location : '' %></small>
+                        <div class="fw-bold"><%= b.venue ? b.venue.name : 'Unknown Venue' %></div>
+                        <small style="color: var(--admin-text-muted);">📍 <%= b.venue ? b.venue.location : '' %></small>
                       </td>
                       <td>
-                        <strong><%= formatDateDisplay(b.date) %></strong>
+                        <strong style="color: var(--admin-text);"><%= formatDateDisplay(b.date) %></strong>
                       </td>
                       <td>
-                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">
+                        <span class="badge rounded-pill fw-medium" style="background: rgba(245,158,11,0.15); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3);">
                           <%= b.startTime %> – <%= b.endTime %>
                         </span>
                       </td>
                       <td>
-                        <span class="badge bg-light text-dark border"><%= b.reason %></span>
+                        <span class="badge" style="background: rgba(255,255,255,0.06); color: var(--admin-text-secondary); border: 1px solid rgba(255,255,255,0.1);"><%= b.reason %></span>
                       </td>
                       <td>
-                        <small class="text-muted"><%= b.createdBy ? b.createdBy.name : 'Admin' %></small>
+                        <small style="color: var(--admin-text-muted);"><%= b.createdBy ? b.createdBy.name : 'Admin' %></small>
                       </td>
                       <td class="text-end">
                         <form action="/admin/blocks/<%= b._id %>?_method=DELETE" method="POST" class="d-inline">
                           <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                          <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Remove this maintenance block and restore venue availability?')">
+                          <button type="submit" class="btn btn-sm btn-outline-danger px-3 hover-lift" style="background: transparent; border-color: rgba(239,68,68,0.3); color: #fca5a5;" onclick="return confirm('Remove this maintenance block and restore venue availability?')">
                             Remove
                           </button>
                         </form>
@@ -82,10 +82,10 @@
               </table>
             </div>
           <% } else { %>
-            <div class="p-5 text-center">
-              <div class="stat-icon info mx-auto mb-2" style="width: 48px; height: 48px; font-size: 1.25rem;">🛠️</div>
-              <h6 class="fw-bold text-dark mb-1">No Active Maintenance Blocks</h6>
-              <p class="text-muted small mb-0">All venues are currently operating on their standard availability schedules.</p>
+            <div class="empty-state">
+              <div class="empty-state-icon" style="background: rgba(16,185,129,0.15); color: #6ee7b7;">🛠️</div>
+              <h5 class="fw-bold mb-1">No Active Maintenance Blocks</h5>
+              <p class="small mb-0" style="color: var(--admin-text-muted);">All venues are currently operating on their standard availability schedules.</p>
             </div>
           <% } %>
         </div>
@@ -96,29 +96,29 @@
   <!-- New Maintenance Block Modal -->
   <div class="modal fade" id="newBlockModal" tabindex="-1" aria-labelledby="newBlockModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content border-0 shadow">
+      <div class="modal-content border-0 shadow-lg" style="background: var(--admin-bg); border: 1px solid var(--admin-border);">
         <form action="/admin/blocks" method="POST">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-          <div class="modal-header border-bottom">
-            <h5 class="modal-title fw-bold text-dark" id="newBlockModalLabel">Schedule Maintenance Block</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="modal-header border-bottom" style="border-color: rgba(255,255,255,0.1) !important;">
+            <h5 class="modal-title fw-bold text-white" id="newBlockModalLabel">Schedule Maintenance Block</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body p-4">
-            <div class="mb-3">
-              <label for="venue" class="form-label fw-semibold small text-muted">Target Venue</label>
-              <select class="form-select" id="venue" name="venue" required>
+            <div class="mb-4">
+              <label for="venue" class="form-label fw-semibold small text-uppercase" style="letter-spacing: 0.05em; color: var(--admin-text-muted);">Target Venue</label>
+              <select class="form-select form-select-lg" id="venue" name="venue" required>
                 <option value="">Select a venue...</option>
                 <% venues.forEach(function(v) { %>
                   <option value="<%= v._id %>"><%= v.name %></option>
                 <% }); %>
-              </select>
+              select>
             </div>
 
-            <div class="mb-3">
-              <label for="date" class="form-label fw-semibold small text-muted">Block Date</label>
+            <div class="mb-4">
+              <label for="date" class="form-label fw-semibold small text-uppercase" style="letter-spacing: 0.05em; color: var(--admin-text-muted);">Block Date</label>
               <input
                 type="date"
-                class="form-control"
+                class="form-control form-control-lg"
                 id="date"
                 name="date"
                 required
@@ -127,33 +127,33 @@
               >
             </div>
 
-            <div class="row g-2 mb-3">
+            <div class="row g-3 mb-4">
               <div class="col-6">
-                <label for="startTime" class="form-label fw-semibold small text-muted">Start Time</label>
-                <input type="time" class="form-control" id="startTime" name="startTime" required value="08:00">
+                <label for="startTime" class="form-label fw-semibold small text-uppercase" style="letter-spacing: 0.05em; color: var(--admin-text-muted);">Start Time</label>
+                <input type="time" class="form-control form-control-lg" id="startTime" name="startTime" required value="08:00">
               </div>
               <div class="col-6">
-                <label for="endTime" class="form-label fw-semibold small text-muted">End Time</label>
-                <input type="time" class="form-control" id="endTime" name="endTime" required value="14:00">
+                <label for="endTime" class="form-label fw-semibold small text-uppercase" style="letter-spacing: 0.05em; color: var(--admin-text-muted);">End Time</label>
+                <input type="time" class="form-control form-control-lg" id="endTime" name="endTime" required value="14:00">
               </div>
             </div>
 
-            <div class="mb-3">
-              <label for="reason" class="form-label fw-semibold small text-muted">Reason / Category</label>
-              <select class="form-select" id="reason" name="reason" required>
+            <div class="mb-4">
+              <label for="reason" class="form-label fw-semibold small text-uppercase" style="letter-spacing: 0.05em; color: var(--admin-text-muted);">Reason / Category</label>
+              <select class="form-select form-select-lg" id="reason" name="reason" required>
                 <% blockReasons.forEach(function(r) { %>
                   <option value="<%= r %>"><%= r %></option>
                 <% }); %>
               </select>
             </div>
 
-            <div class="alert alert-light border small text-muted mb-0">
+            <div class="alert border-0 small mb-0 rounded-3" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06) !important; color: var(--admin-text-secondary);">
               * Note: If any approved or pending bookings conflict with this scheduled block, a warning notification will be recorded in the system.
             </div>
           </div>
-          <div class="modal-footer border-top">
-            <button type="button" class="btn btn-outline-custom" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary-custom">Create Block</button>
+          <div class="modal-footer border-top" style="border-color: rgba(255,255,255,0.1) !important;">
+            <button type="button" class="btn btn-outline-custom px-4" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary-custom px-4 hover-lift">Create Block</button>
           </div>
         </form>
       </div>

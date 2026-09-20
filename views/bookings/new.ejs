@@ -13,26 +13,29 @@
   <main class="container py-5">
     <%- include('../partials/flash') %>
 
-    <div class="row justify-content-center">
+    <div class="row justify-content-center animate-fade-in-up">
       <div class="col-lg-8">
         <!-- Breadcrumb -->
         <nav aria-label="breadcrumb" class="mb-4">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-muted">Home</a></li>
-            <li class="breadcrumb-item"><a href="/venues" class="text-decoration-none text-muted">Venues</a></li>
-            <li class="breadcrumb-item"><a href="/venues/<%= venue._id %>" class="text-decoration-none text-muted"><%= venue.name %></a></li>
-            <li class="breadcrumb-item active" aria-current="page">Book Venue</li>
+            <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-muted hover-lift">Home</a></li>
+            <li class="breadcrumb-item"><a href="/venues" class="text-decoration-none text-muted hover-lift">Venues</a></li>
+            <li class="breadcrumb-item"><a href="/venues/<%= venue._id %>" class="text-decoration-none text-muted hover-lift"><%= venue.name %></a></li>
+            <li class="breadcrumb-item active fw-medium" aria-current="page">Book Venue</li>
           </ol>
         </nav>
 
-        <div class="card card-custom p-4 p-md-5 border-0 shadow-sm">
-          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 border-bottom pb-3">
+        <div class="card card-custom p-4 p-md-5 border-0 shadow-sm" style="border-radius: var(--radius-xl);">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 pb-4 border-bottom">
             <div>
-              <h2 class="fw-bold text-dark mb-1">Request Venue Booking</h2>
-              <p class="text-muted small mb-0">Fill out your event details to submit a reservation request for administrative approval.</p>
+              <h2 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+                <svg width="28" height="28" fill="none" stroke="var(--color-primary)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                Request Venue Booking
+              </h2>
+              <p class="text-muted small mb-0 ms-1">Fill out your event details to submit a reservation request for administrative approval.</p>
             </div>
             <div class="text-md-end">
-              <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-6 px-3 py-2">
+              <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-6 px-4 py-2 rounded-pill shadow-sm">
                 <%= venue.name %>
               </span>
             </div>
@@ -44,27 +47,36 @@
             <input type="hidden" id="hourlyRate" value="<%= venue.hourlyRate %>">
 
             <!-- Venue Summary Card -->
-            <div class="p-3 bg-light rounded-3 mb-4 d-flex flex-wrap justify-content-between align-items-center gap-2">
-              <div>
-                <span class="text-muted small d-block">Location</span>
-                <span class="fw-semibold text-dark">📍 <%= venue.location %></span>
+            <div class="p-3 bg-light rounded-3 mb-5 d-flex flex-wrap justify-content-between align-items-center gap-3 border border-dashed border-2" style="border-color: #e2e8f0 !important;">
+              <div class="d-flex align-items-center gap-2">
+                <div class="stat-icon info" style="width: 32px; height: 32px; font-size: 1rem;">📍</div>
+                <div>
+                  <span class="text-muted small d-block" style="line-height: 1;">Location</span>
+                  <span class="fw-bold text-dark"><%= venue.location %></span>
+                </div>
               </div>
-              <div>
-                <span class="text-muted small d-block">Capacity Limit</span>
-                <span class="fw-semibold text-dark">👥 Max <%= venue.capacity %> attendees</span>
+              <div class="d-flex align-items-center gap-2">
+                <div class="stat-icon warning" style="width: 32px; height: 32px; font-size: 1rem;">👥</div>
+                <div>
+                  <span class="text-muted small d-block" style="line-height: 1;">Capacity Limit</span>
+                  <span class="fw-bold text-dark">Max <%= venue.capacity %> attendees</span>
+                </div>
               </div>
-              <div>
-                <span class="text-muted small d-block">Hourly Tariff</span>
-                <span class="fw-semibold text-primary"><%= formatCurrency(venue.hourlyRate) %>/hr</span>
+              <div class="d-flex align-items-center gap-2">
+                <div class="stat-icon primary" style="width: 32px; height: 32px; font-size: 1rem;">💰</div>
+                <div>
+                  <span class="text-muted small d-block" style="line-height: 1;">Hourly Tariff</span>
+                  <span class="fw-bold text-primary"><%= formatCurrency(venue.hourlyRate) %>/hr</span>
+                </div>
               </div>
             </div>
 
             <!-- Event Details -->
-            <div class="mb-3">
-              <label for="eventName" class="form-label fw-semibold small text-muted">Event Name</label>
+            <div class="mb-4">
+              <label for="eventName" class="form-label fw-bold text-dark small text-uppercase tracking-wider">Event Name</label>
               <input
                 type="text"
-                class="form-control"
+                class="form-control form-control-lg bg-light"
                 id="eventName"
                 name="eventName"
                 value="<%= oldInput.eventName || '' %>"
@@ -74,10 +86,10 @@
               >
             </div>
 
-            <div class="mb-3">
-              <label for="eventDescription" class="form-label fw-semibold small text-muted">Event Description & Objective</label>
+            <div class="mb-4">
+              <label for="eventDescription" class="form-label fw-bold text-dark small text-uppercase tracking-wider">Event Description & Objective</label>
               <textarea
-                class="form-control"
+                class="form-control bg-light"
                 id="eventDescription"
                 name="eventDescription"
                 rows="3"
@@ -86,29 +98,32 @@
               ><%= oldInput.eventDescription || '' %></textarea>
             </div>
 
-            <div class="row g-3 mb-3">
+            <div class="row g-4 mb-4">
               <div class="col-md-6">
-                <label for="expectedAttendees" class="form-label fw-semibold small text-muted">
-                  Expected Attendees (Max: <%= venue.capacity %>)
+                <label for="expectedAttendees" class="form-label fw-bold text-dark small text-uppercase tracking-wider">
+                  Expected Attendees
                 </label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="expectedAttendees"
-                  name="expectedAttendees"
-                  value="<%= oldInput.expectedAttendees || '' %>"
-                  required
-                  min="1"
-                  max="<%= venue.capacity %>"
-                  placeholder="e.g. 120"
-                >
+                <div class="input-group input-group-lg">
+                  <input
+                    type="number"
+                    class="form-control bg-light border-end-0"
+                    id="expectedAttendees"
+                    name="expectedAttendees"
+                    value="<%= oldInput.expectedAttendees || '' %>"
+                    required
+                    min="1"
+                    max="<%= venue.capacity %>"
+                    placeholder="e.g. 120"
+                  >
+                  <span class="input-group-text bg-light text-muted fw-semibold">/ <%= venue.capacity %></span>
+                </div>
               </div>
 
               <div class="col-md-6">
-                <label for="bookingDate" class="form-label fw-semibold small text-muted">Event Date</label>
+                <label for="bookingDate" class="form-label fw-bold text-dark small text-uppercase tracking-wider">Event Date</label>
                 <input
                   type="date"
-                  class="form-control"
+                  class="form-control form-control-lg bg-light"
                   id="bookingDate"
                   name="bookingDate"
                   value="<%= oldInput.bookingDate || prefillDate %>"
@@ -119,55 +134,61 @@
             </div>
 
             <!-- Time Slots -->
-            <div class="row g-3 mb-4">
+            <div class="row g-4 mb-5">
               <div class="col-md-6">
-                <label for="startTime" class="form-label fw-semibold small text-muted">Start Time (24h)</label>
+                <label for="startTime" class="form-label fw-bold text-dark small text-uppercase tracking-wider">Start Time</label>
                 <input
                   type="time"
-                  class="form-control"
+                  class="form-control form-control-lg bg-light"
                   id="startTime"
                   name="startTime"
                   value="<%= oldInput.startTime || prefillStart %>"
                   required
                   step="900"
                 >
-                <small class="text-muted">Standard hours: 08:00 to 22:00</small>
+                <small class="text-muted mt-1 d-block">Standard hours: 08:00 to 22:00</small>
               </div>
 
               <div class="col-md-6">
-                <label for="endTime" class="form-label fw-semibold small text-muted">End Time (24h)</label>
+                <label for="endTime" class="form-label fw-bold text-dark small text-uppercase tracking-wider">End Time</label>
                 <input
                   type="time"
-                  class="form-control"
+                  class="form-control form-control-lg bg-light"
                   id="endTime"
                   name="endTime"
                   value="<%= oldInput.endTime || prefillEnd %>"
                   required
                   step="900"
                 >
-                <small class="text-muted">Must be later than start time</small>
+                <small class="text-muted mt-1 d-block">Must be later than start time</small>
               </div>
             </div>
 
             <!-- Estimated Calculation Box -->
-            <div class="p-3 rounded-3 border mb-4 bg-white shadow-sm">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <span class="text-muted small">Estimated Duration:</span>
-                <span class="fw-bold text-dark" id="durationDisplay">2.0 hrs</span>
+            <div class="p-4 rounded-3 mb-5" style="background: linear-gradient(135deg, rgba(99,102,241,0.05), rgba(79,70,229,0.05)); border: 1px solid rgba(99,102,241,0.1);">
+              <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                <span class="text-muted fw-semibold d-flex align-items-center gap-2">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  Estimated Duration:
+                </span>
+                <span class="fw-bold text-dark fs-5" id="durationDisplay">2.0 hrs</span>
               </div>
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="text-muted small">Estimated Total Amount:</span>
-                <span class="fw-bold text-success fs-5" id="amountDisplay">₹0</span>
+              <div class="d-flex justify-content-between align-items-center pt-1">
+                <span class="text-muted fw-semibold d-flex align-items-center gap-2">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  Estimated Total Amount:
+                </span>
+                <span class="fw-bold text-success display-6 mb-0" id="amountDisplay" style="line-height: 1;">₹0</span>
               </div>
-              <div class="text-muted mt-2 small" style="font-size: 0.78rem;">
+              <div class="text-muted mt-3 small" style="font-size: 0.78rem;">
                 * Calculated as Duration × Hourly Rate. Final amount is verified and confirmed server-side upon booking creation.
               </div>
             </div>
 
-            <div class="d-flex justify-content-between align-items-center">
-              <a href="/venues/<%= venue._id %>" class="btn btn-outline-custom">Cancel</a>
-              <button type="submit" class="btn btn-primary-custom px-4 py-2">
-                Submit Booking Request
+            <div class="d-flex justify-content-between align-items-center pt-2">
+              <a href="/venues/<%= venue._id %>" class="btn btn-outline-custom px-4 py-2 fw-semibold">Cancel</a>
+              <button type="submit" class="btn btn-primary-custom px-5 py-2 fs-5 hover-lift shadow-sm" style="background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); border: none;">
+                Submit Request
               </button>
             </div>
           </form>
@@ -175,6 +196,11 @@
       </div>
     </div>
   </main>
+
+  <style>
+    .tracking-wider { letter-spacing: 0.05em; }
+    .border-dashed { border-style: dashed !important; }
+  </style>
 
   <%- include('../partials/footer') %>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

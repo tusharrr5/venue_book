@@ -7,34 +7,32 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/css/custom.css">
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 admin-theme">
   <%- include('../../partials/navbar') %>
 
   <div class="container-fluid flex-grow-1">
     <div class="row">
-      <!-- Admin Sidebar -->
       <div class="col-lg-2 p-0 d-none d-lg-block">
         <%- include('../../partials/adminSidebar') %>
       </div>
 
-      <!-- Main Content -->
-      <div class="col-lg-10 p-4 p-md-5">
+      <div class="col-lg-10 p-4 p-md-5 admin-content">
         <%- include('../../partials/flash') %>
 
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 animate-fade-in-up">
           <div>
-            <h1 class="fw-bold text-dark mb-1">Campus Venues Directory</h1>
-            <p class="text-muted mb-0">Create, update, toggle availability status, and manage all campus spaces.</p>
+            <h1 class="fw-bold mb-1" style="font-size: 1.75rem;">Campus Venues Directory</h1>
+            <p class="mb-0" style="color: var(--admin-text-muted);">Create, update, toggle availability status, and manage all campus spaces.</p>
           </div>
           <div>
-            <a href="/admin/venues/new" class="btn btn-primary-custom d-flex align-items-center gap-2">
+            <a href="/admin/venues/new" class="btn btn-primary-custom d-flex align-items-center gap-2 hover-lift">
               <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
               Add New Venue
             </a>
           </div>
         </div>
 
-        <div class="card card-custom border-0 shadow-sm overflow-hidden">
+        <div class="card card-custom border-0 shadow-sm overflow-hidden animate-fade-in-up" style="animation-delay: 0.15s;">
           <div class="table-responsive">
             <table class="table table-custom mb-0">
               <thead>
@@ -55,19 +53,19 @@
                         <img
                           src="<%= v.imageUrl %>"
                           alt="<%= v.name %>"
-                          class="rounded-2"
-                          style="width: 50px; height: 50px; object-fit: cover;"
+                          class="rounded-3 shadow-sm"
+                          style="width: 50px; height: 50px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1);"
                           onerror="this.src='https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=200&q=80'"
                         >
                         <div>
-                          <div class="fw-bold text-dark"><%= v.name %></div>
-                          <small class="text-muted"><%= (v.facilities || []).length %> facilities listed</small>
+                          <div class="fw-bold" style="color: var(--admin-text);"><%= v.name %></div>
+                          <small style="color: var(--admin-text-muted);"><%= (v.facilities || []).length %> facilities listed</small>
                         </div>
                       </div>
                     </td>
-                    <td><%= v.location %></td>
-                    <td><strong><%= v.capacity %></strong> pax</td>
-                    <td class="fw-bold text-primary"><%= formatCurrency(v.hourlyRate) %>/hr</td>
+                    <td style="color: var(--admin-text-secondary);"><%= v.location %></td>
+                    <td><strong style="color: var(--admin-text);"><%= v.capacity %></strong> <span style="color: var(--admin-text-muted);">pax</span></td>
+                    <td class="fw-bold" style="color: #a5b4fc;"><%= formatCurrency(v.hourlyRate) %>/hr</td>
                     <td>
                       <span class="badge badge-status <%= v.status === 'active' ? 'badge-active' : 'badge-inactive' %>">
                         <%= v.status %>
@@ -77,20 +75,21 @@
                       <div class="d-flex justify-content-end gap-2">
                         <form action="/admin/venues/<%= v._id %>/toggle-status" method="POST" class="d-inline">
                           <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                          <button type="submit" class="btn btn-sm <%= v.status === 'active' ? 'btn-outline-warning' : 'btn-outline-success' %>" title="Toggle Active/Inactive">
+                          <button type="submit" class="btn btn-sm <%= v.status === 'active' ? 'btn-outline-warning' : 'btn-outline-success' %> px-3" style="background: transparent; border-color: <%= v.status === 'active' ? 'rgba(245,158,11,0.3)' : 'rgba(16,185,129,0.3)' %>; color: <%= v.status === 'active' ? '#fcd34d' : '#6ee7b7' %>;" title="Toggle Active/Inactive">
                             <%= v.status === 'active' ? 'Deactivate' : 'Activate' %>
                           </button>
                         </form>
 
-                        <a href="/admin/venues/<%= v._id %>/edit" class="btn btn-sm btn-outline-custom">
+                        <a href="/admin/venues/<%= v._id %>/edit" class="btn btn-sm btn-outline-custom px-3">
                           Edit
                         </a>
 
                         <button
                           type="button"
-                          class="btn btn-sm btn-outline-danger"
+                          class="btn btn-sm btn-outline-danger px-3"
                           data-bs-toggle="modal"
                           data-bs-target="#deleteVenueModal_<%= v._id %>"
+                          style="background: transparent; border-color: rgba(239,68,68,0.3); color: #fca5a5;"
                         >
                           Delete
                         </button>
@@ -99,24 +98,24 @@
                       <!-- Delete Modal -->
                       <div class="modal fade text-start" id="deleteVenueModal_<%= v._id %>" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content border-0 shadow">
+                          <div class="modal-content border-0 shadow-lg" style="background: var(--admin-bg); border: 1px solid var(--admin-border);">
                             <form action="/admin/venues/<%= v._id %>?_method=DELETE" method="POST">
                               <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                               <div class="modal-header border-bottom">
-                                <h5 class="modal-title fw-bold text-dark">Delete Venue</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <h5 class="modal-title fw-bold text-white">Delete Venue</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
                               <div class="modal-body p-4">
-                                <p class="text-muted mb-2">
-                                  Are you sure you want to delete <strong>"<%= v.name %>"</strong>?
+                                <p class="mb-2" style="color: var(--admin-text-secondary);">
+                                  Are you sure you want to delete <strong class="text-white">"<%= v.name %>"</strong>?
                                 </p>
-                                <p class="text-muted small mb-0">
+                                <p class="small mb-0" style="color: var(--admin-text-muted);">
                                   Note: If this venue has historical bookings, the system will automatically deactivate it instead of permanently deleting records, preserving audit history.
                                 </p>
                               </div>
                               <div class="modal-footer border-top">
                                 <button type="button" class="btn btn-outline-custom" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-danger">Confirm Delete / Deactivate</button>
+                                <button type="submit" class="btn btn-danger hover-lift" style="background: linear-gradient(135deg, #ef4444, #dc2626); border: none;">Confirm Delete / Deactivate</button>
                               </div>
                             </form>
                           </div>

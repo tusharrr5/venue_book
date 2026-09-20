@@ -14,8 +14,8 @@
   <header class="hero-section text-center text-lg-start">
     <div class="container position-relative" style="z-index: 2;">
       <div class="row align-items-center g-5">
-        <div class="col-lg-7">
-          <span class="badge bg-white text-primary fw-bold px-3 py-2 rounded-pill mb-3 shadow-sm">
+        <div class="col-lg-7 animate-fade-in-up">
+          <span class="badge bg-white text-primary fw-bold px-3 py-2 rounded-pill mb-4 shadow-sm" style="font-size: 0.8rem; letter-spacing: 0.05em;">
             Campus Venue Management System
           </span>
           <h1 class="hero-title mb-4">Find the Right Venue for Your Next Event</h1>
@@ -23,44 +23,44 @@
             Search campus venues, check availability and manage your event bookings from one place. Clash-free scheduling, transparent facilities, and instant booking workflows.
           </p>
           <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
-            <a href="/venues" class="btn btn-light btn-lg px-4 py-3 fw-bold text-primary shadow">
+            <a href="/venues" class="btn btn-light btn-lg px-4 py-3 fw-bold text-primary shadow hover-lift" style="border-radius: var(--radius-md);">
               Explore Venues
             </a>
             <% if (isAuthenticated) { %>
-              <a href="/venues" class="btn btn-outline-light btn-lg px-4 py-3 fw-semibold">
+              <a href="/venues" class="btn btn-outline-light btn-lg px-4 py-3 fw-semibold hover-lift" style="border-radius: var(--radius-md);">
                 Book a Venue
               </a>
             <% } else { %>
-              <a href="/register" class="btn btn-outline-light btn-lg px-4 py-3 fw-semibold">
+              <a href="/register" class="btn btn-outline-light btn-lg px-4 py-3 fw-semibold hover-lift" style="border-radius: var(--radius-md);">
                 Get Started
               </a>
             <% } %>
           </div>
         </div>
-        <div class="col-lg-5 d-none d-lg-block">
-          <div class="card card-custom p-4 text-dark shadow-lg border-0 bg-white" style="border-radius: 24px;">
-            <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="col-lg-5 d-none d-lg-block animate-fade-in-up" style="animation-delay: 0.2s;">
+          <div class="card-glass p-4 text-dark" style="border-radius: 24px;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
               <span class="fw-bold text-dark">Quick Campus Snapshot</span>
               <span class="badge bg-success-subtle text-success border border-success-subtle">Live System</span>
             </div>
             <div class="row g-3">
               <div class="col-6">
-                <div class="p-3 bg-light rounded-3 text-center">
-                  <div class="fs-2 fw-bold text-primary"><%= stats.venueCount %></div>
-                  <div class="text-muted small">Campus Venues</div>
+                <div class="p-3 bg-white rounded-3 text-center shadow-sm hover-lift">
+                  <div class="fs-2 fw-bold text-primary mb-1"><%= stats.venueCount %></div>
+                  <div class="text-muted small fw-semibold">Campus Venues</div>
                 </div>
               </div>
               <div class="col-6">
-                <div class="p-3 bg-light rounded-3 text-center">
-                  <div class="fs-2 fw-bold text-success"><%= stats.completedEventCount %></div>
-                  <div class="text-muted small">Completed Events</div>
+                <div class="p-3 bg-white rounded-3 text-center shadow-sm hover-lift">
+                  <div class="fs-2 fw-bold text-success mb-1"><%= stats.completedEventCount %></div>
+                  <div class="text-muted small fw-semibold">Completed Events</div>
                 </div>
               </div>
               <div class="col-12">
-                <div class="p-3 bg-light rounded-3 d-flex align-items-center gap-3">
-                  <div class="stat-icon primary" style="width: 44px; height: 44px; font-size: 1.25rem;">⚡</div>
+                <div class="p-3 bg-white rounded-3 d-flex align-items-center gap-3 shadow-sm hover-lift mt-2">
+                  <div class="stat-icon primary">⚡</div>
                   <div>
-                    <div class="fw-bold small text-dark">Real-Time Conflict Prevention</div>
+                    <div class="fw-bold small text-dark mb-1">Real-Time Conflict Prevention</div>
                     <div class="text-muted" style="font-size: 0.8rem;">Zero double bookings with automated overlap detection</div>
                   </div>
                 </div>
@@ -73,56 +73,57 @@
   </header>
 
   <!-- Flash Messages -->
-  <div class="container mt-4">
-    <%- include('partials/flash') %>
-  </div>
+  <%- include('partials/flash') %>
 
   <!-- Featured Venues Section -->
   <section class="py-5">
-    <div class="container">
-      <div class="d-flex justify-content-between align-items-end mb-4">
+    <div class="container py-4">
+      <div class="d-flex justify-content-between align-items-end mb-4 animate-fade-in-up">
         <div>
-          <span class="text-primary text-uppercase fw-bold small">Campus Spaces</span>
-          <h2 class="fw-bold text-dark mb-0">Featured Venues</h2>
+          <span class="section-label">Campus Spaces</span>
+          <h2 class="fw-bold text-dark mb-0 mt-1">Featured Venues</h2>
         </div>
-        <a href="/venues" class="text-primary fw-semibold text-decoration-none">
+        <a href="/venues" class="text-primary fw-semibold text-decoration-none hover-lift">
           View All Venues &rarr;
         </a>
       </div>
 
-      <div class="row g-4">
+      <div class="row g-4 stagger-children">
         <% if (featuredVenues && featuredVenues.length > 0) { %>
           <% featuredVenues.forEach(function(venue) { %>
             <div class="col-md-6 col-lg-4">
               <div class="card card-custom h-100">
-                <img src="<%= venue.imageUrl %>" class="card-venue-img" alt="<%= venue.name %>" onerror="this.src='https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=800&q=80'">
-                <div class="card-body p-4 d-flex flex-column">
-                  <div class="d-flex justify-content-between align-items-start mb-2">
-                    <h5 class="card-title fw-bold text-dark mb-0"><%= venue.name %></h5>
-                    <span class="badge badge-status <%= venue.status === 'active' ? 'badge-active' : 'badge-inactive' %>">
+                <div class="position-relative overflow-hidden">
+                  <img src="<%= venue.imageUrl %>" class="card-venue-img" alt="<%= venue.name %>" onerror="this.src='https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=800&q=80'">
+                  <div class="position-absolute top-0 end-0 p-3">
+                    <span class="badge badge-status <%= venue.status === 'active' ? 'badge-active' : 'badge-inactive' %> shadow-sm">
                       <%= venue.status %>
                     </span>
                   </div>
-                  <p class="text-muted small mb-2">📍 <%= venue.location %></p>
-                  <p class="text-muted small flex-grow-1" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                </div>
+                <div class="card-body p-4 d-flex flex-column">
+                  <h5 class="card-title fw-bold text-dark mb-2"><%= venue.name %></h5>
+                  <p class="text-muted small mb-3"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="me-1"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg><%= venue.location %></p>
+                  
+                  <p class="text-muted small flex-grow-1" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.6;">
                     <%= venue.description %>
                   </p>
 
-                  <div class="d-flex flex-wrap gap-1 mb-3">
+                  <div class="d-flex flex-wrap gap-2 mb-4">
                     <% (venue.facilities || []).slice(0, 3).forEach(function(f) { %>
                       <span class="facility-pill"><%= f %></span>
                     <% }); %>
                     <% if (venue.facilities && venue.facilities.length > 3) { %>
-                      <span class="facility-pill">+<%= venue.facilities.length - 3 %> more</span>
+                      <span class="facility-pill bg-light border-0 text-muted">+<%= venue.facilities.length - 3 %></span>
                     <% } %>
                   </div>
 
                   <div class="border-top pt-3 d-flex justify-content-between align-items-center">
                     <div>
-                      <div class="fw-bold text-dark"><%= formatCurrency(venue.hourlyRate) %><span class="text-muted fw-normal small">/hr</span></div>
-                      <small class="text-muted">Capacity: <strong><%= venue.capacity %></strong> pax</small>
+                      <div class="fw-bold text-dark fs-5"><%= formatCurrency(venue.hourlyRate) %><span class="text-muted fw-normal fs-6">/hr</span></div>
+                      <small class="text-muted">Capacity: <strong class="text-dark"><%= venue.capacity %></strong> pax</small>
                     </div>
-                    <a href="/venues/<%= venue._id %>" class="btn btn-sm btn-outline-custom">
+                    <a href="/venues/<%= venue._id %>" class="btn btn-primary-custom px-4">
                       Details
                     </a>
                   </div>
@@ -132,7 +133,11 @@
           <% }); %>
         <% } else { %>
           <div class="col-12 text-center py-5">
-            <p class="text-muted">No venues available yet. Please run the database seeder.</p>
+            <div class="empty-state">
+              <div class="empty-state-icon text-muted" style="background: var(--color-border);">!</div>
+              <h5 class="fw-bold text-dark mb-1">No venues available yet.</h5>
+              <p class="text-muted">Please run the database seeder to populate sample venues.</p>
+            </div>
           </div>
         <% } %>
       </div>
@@ -141,40 +146,40 @@
 
   <!-- How It Works Section -->
   <section class="py-5 bg-white border-top border-bottom">
-    <div class="container">
-      <div class="text-center max-w-600 mx-auto mb-5">
-        <span class="text-primary text-uppercase fw-bold small">Seamless Process</span>
-        <h2 class="fw-bold text-dark">How Booking Works</h2>
+    <div class="container py-4">
+      <div class="text-center max-w-600 mx-auto mb-5 animate-fade-in-up">
+        <span class="section-label">Seamless Process</span>
+        <h2 class="fw-bold text-dark mt-2">How Booking Works</h2>
         <p class="text-muted">Reserve your space in four straightforward steps with full transparency</p>
       </div>
 
-      <div class="row g-4 text-center">
+      <div class="row g-4 text-center stagger-children">
         <div class="col-md-3">
-          <div class="p-4 rounded-4 bg-light h-100">
-            <div class="stat-icon primary mx-auto mb-3">1</div>
-            <h5 class="fw-bold text-dark mb-2">Discover</h5>
-            <p class="text-muted small mb-0">Search campus venues by capacity, equipment, and required facilities.</p>
+          <div class="p-4 rounded-4 bg-light h-100 border border-light shadow-sm hover-lift">
+            <div class="stat-icon primary mx-auto mb-4" style="width: 64px; height: 64px; font-size: 1.5rem;">1</div>
+            <h5 class="fw-bold text-dark mb-3">Discover</h5>
+            <p class="text-muted small mb-0" style="line-height: 1.6;">Search campus venues by capacity, equipment, and required facilities.</p>
           </div>
         </div>
         <div class="col-md-3">
-          <div class="p-4 rounded-4 bg-light h-100">
-            <div class="stat-icon info mx-auto mb-3">2</div>
-            <h5 class="fw-bold text-dark mb-2">Schedule</h5>
-            <p class="text-muted small mb-0">Select your date and time with live conflict checking against maintenance & events.</p>
+          <div class="p-4 rounded-4 bg-light h-100 border border-light shadow-sm hover-lift">
+            <div class="stat-icon info mx-auto mb-4" style="width: 64px; height: 64px; font-size: 1.5rem;">2</div>
+            <h5 class="fw-bold text-dark mb-3">Schedule</h5>
+            <p class="text-muted small mb-0" style="line-height: 1.6;">Select your date and time with live conflict checking against maintenance & events.</p>
           </div>
         </div>
         <div class="col-md-3">
-          <div class="p-4 rounded-4 bg-light h-100">
-            <div class="stat-icon warning mx-auto mb-3">3</div>
-            <h5 class="fw-bold text-dark mb-2">Admin Review</h5>
-            <p class="text-muted small mb-0">Venue managers review your request with double-check conflict validation.</p>
+          <div class="p-4 rounded-4 bg-light h-100 border border-light shadow-sm hover-lift">
+            <div class="stat-icon warning mx-auto mb-4" style="width: 64px; height: 64px; font-size: 1.5rem;">3</div>
+            <h5 class="fw-bold text-dark mb-3">Admin Review</h5>
+            <p class="text-muted small mb-0" style="line-height: 1.6;">Venue managers review your request with double-check conflict validation.</p>
           </div>
         </div>
         <div class="col-md-3">
-          <div class="p-4 rounded-4 bg-light h-100">
-            <div class="stat-icon success mx-auto mb-3">4</div>
-            <h5 class="fw-bold text-dark mb-2">Host Event</h5>
-            <p class="text-muted small mb-0">Receive instant confirmation and host your campus event with complete peace of mind.</p>
+          <div class="p-4 rounded-4 bg-light h-100 border border-light shadow-sm hover-lift">
+            <div class="stat-icon success mx-auto mb-4" style="width: 64px; height: 64px; font-size: 1.5rem;">4</div>
+            <h5 class="fw-bold text-dark mb-3">Host Event</h5>
+            <p class="text-muted small mb-0" style="line-height: 1.6;">Receive instant confirmation and host your campus event with complete peace of mind.</p>
           </div>
         </div>
       </div>

@@ -2,28 +2,28 @@
   <div class="container">
     <div class="row g-4 mb-4">
       <div class="col-lg-4 col-md-6">
-        <h5 class="fw-bold text-dark mb-2">Venue<span class="text-primary">Hub</span></h5>
-        <p class="text-muted small mb-3">
+        <h5 class="fw-bold mb-2">Venue<span style="color: #818cf8;">Hub</span></h5>
+        <p class="small mb-3" style="color: #64748b; line-height: 1.7;">
           The centralized campus event and venue booking management platform. Providing seamless scheduling, clash-free reservations, and transparent space utilisation for university communities.
         </p>
-        <span class="badge bg-light text-dark border">Campus Release v1.0</span>
+        <span class="badge rounded-pill" style="background: rgba(99,102,241,0.1); color: #818cf8; border: 1px solid rgba(99,102,241,0.2); font-size: 0.72rem; padding: 0.35em 0.85em;">Campus Release v1.0</span>
       </div>
       <div class="col-lg-2 col-md-6">
-        <h6 class="fw-semibold text-dark mb-3">Quick Navigation</h6>
+        <h6 class="fw-semibold mb-3" style="color: #e2e8f0;">Quick Navigation</h6>
         <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
-          <li><a href="/" class="text-decoration-none text-muted">Home</a></li>
-          <li><a href="/venues" class="text-decoration-none text-muted">Discover Venues</a></li>
+          <li><a href="/">Home</a></li>
+          <li><a href="/venues">Discover Venues</a></li>
           <% if (isAuthenticated) { %>
-            <li><a href="<%= isAdmin ? '/admin/dashboard' : '/dashboard' %>" class="text-decoration-none text-muted">Dashboard</a></li>
+            <li><a href="<%= isAdmin ? '/admin/dashboard' : '/dashboard' %>">Dashboard</a></li>
           <% } else { %>
-            <li><a href="/login" class="text-decoration-none text-muted">Sign In</a></li>
-            <li><a href="/register" class="text-decoration-none text-muted">Create Account</a></li>
+            <li><a href="/login">Sign In</a></li>
+            <li><a href="/register">Create Account</a></li>
           <% } %>
         </ul>
       </div>
       <div class="col-lg-3 col-md-6">
-        <h6 class="fw-semibold text-dark mb-3">Campus Facilities</h6>
-        <ul class="list-unstyled small mb-0 d-flex flex-column gap-2 text-muted">
+        <h6 class="fw-semibold mb-3" style="color: #e2e8f0;">Campus Facilities</h6>
+        <ul class="list-unstyled small mb-0 d-flex flex-column gap-2" style="color: #64748b;">
           <li>Main Auditoriums & Halls</li>
           <li>Tech & Innovation Labs</li>
           <li>Smart Conference Suites</li>
@@ -31,13 +31,13 @@
         </ul>
       </div>
       <div class="col-lg-3 col-md-6">
-        <h6 class="fw-semibold text-dark mb-3">Operating Window</h6>
-        <p class="text-muted small mb-1">Standard Campus Hours:</p>
-        <p class="fw-bold text-dark small mb-2">08:00 AM – 10:00 PM (Mon – Sun)</p>
-        <p class="text-muted small mb-0">Emergency Maintenance Support: <span class="text-primary">support@campushub.edu</span></p>
+        <h6 class="fw-semibold mb-3" style="color: #e2e8f0;">Operating Window</h6>
+        <p class="small mb-1" style="color: #64748b;">Standard Campus Hours:</p>
+        <p class="fw-bold small mb-2" style="color: #e2e8f0;">08:00 AM – 10:00 PM (Mon – Sun)</p>
+        <p class="small mb-0" style="color: #64748b;">Emergency Maintenance Support: <a href="mailto:support@campushub.edu" style="color: #818cf8;">support@campushub.edu</a></p>
       </div>
     </div>
-    <div class="border-top pt-3 d-flex flex-column flex-sm-row justify-content-between align-items-center small text-muted">
+    <div class="border-top pt-3 d-flex flex-column flex-sm-row justify-content-between align-items-center small" style="color: #475569;">
       <p class="mb-0">&copy; <%= new Date().getFullYear() %> VenueHub Management System. All rights reserved.</p>
       <p class="mb-0 mt-2 mt-sm-0">Built with Node.js, Express, EJS & MongoDB</p>
     </div>

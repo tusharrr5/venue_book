@@ -7,7 +7,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/css/custom.css">
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="admin-theme">
   <%- include('../partials/navbar') %>
 
   <div class="container-fluid flex-grow-1">
@@ -18,29 +18,23 @@
       </div>
 
       <!-- Main Content -->
-      <div class="col-lg-10 p-4 p-md-5">
+      <div class="col-lg-10 p-4 p-md-5 admin-content">
         <%- include('../partials/flash') %>
 
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 animate-fade-in-up">
           <div>
-            <h1 class="fw-bold text-dark mb-1">Admin Command Center</h1>
-            <p class="text-muted mb-0">Overview of campus spaces, pending approvals, revenue, and daily reservations.</p>
+            <h1 class="fw-bold mb-1" style="font-size: 1.75rem;">Admin Command Center</h1>
+            <p class="mb-0" style="color: var(--admin-text-muted);">Overview of campus spaces, pending approvals, revenue, and daily reservations.</p>
           </div>
           <div class="d-flex gap-2">
-            <a href="/admin/venues/new" class="btn btn-outline-custom btn-sm">
-              + New Venue
-            </a>
-            <a href="/admin/blocks" class="btn btn-outline-custom btn-sm">
-              + Maintenance Block
-            </a>
-            <a href="/admin/reports" class="btn btn-primary-custom btn-sm">
-              View Analytics
-            </a>
+            <a href="/admin/venues/new" class="btn btn-outline-custom btn-sm">+ New Venue</a>
+            <a href="/admin/blocks" class="btn btn-outline-custom btn-sm">+ Block</a>
+            <a href="/admin/reports" class="btn btn-primary-custom btn-sm">View Analytics</a>
           </div>
         </div>
 
         <!-- Summary KPI Cards -->
-        <div class="row g-3 mb-4">
+        <div class="row g-3 mb-4 stagger-children">
           <div class="col-sm-6 col-xl-3">
             <div class="stat-card">
               <div class="stat-icon primary">🏛️</div>
@@ -75,8 +69,8 @@
             <div class="stat-card">
               <div class="stat-icon success">💰</div>
               <div>
-                <div class="stat-value fs-4"><%= formatCurrency(stats.totalRevenue) %></div>
-                <div class="stat-label">Total Completed Revenue</div>
+                <div class="stat-value" style="font-size: 1.4rem;"><%= formatCurrency(stats.totalRevenue) %></div>
+                <div class="stat-label">Completed Revenue</div>
               </div>
             </div>
           </div>
@@ -86,11 +80,11 @@
         <div class="row g-4 mb-4">
           <!-- Pending Approval Requests -->
           <div class="col-lg-7">
-            <div class="card card-custom border-0 shadow-sm h-100">
-              <div class="card-header bg-white border-bottom p-4 d-flex justify-content-between align-items-center">
+            <div class="card card-custom border-0 h-100">
+              <div class="card-header border-bottom p-4 d-flex justify-content-between align-items-center">
                 <div>
-                  <h5 class="fw-bold text-dark mb-0">Pending Approval Requests</h5>
-                  <small class="text-muted">Awaiting administrative decision</small>
+                  <h5 class="fw-bold mb-0">Pending Approval Requests</h5>
+                  <small style="color: var(--admin-text-muted);">Awaiting administrative decision</small>
                 </div>
                 <a href="/admin/bookings?status=pending" class="btn btn-sm btn-outline-custom">View All</a>
               </div>
@@ -110,18 +104,16 @@
                       <% pendingRequests.forEach(function(b) { %>
                         <tr>
                           <td>
-                            <div class="fw-bold text-dark"><%= b.eventName %></div>
-                            <small class="text-muted"><%= b.organiser ? b.organiser.name : 'Unknown' %></small>
+                            <div class="fw-bold"><%= b.eventName %></div>
+                            <small style="color: var(--admin-text-muted);"><%= b.organiser ? b.organiser.name : 'Unknown' %></small>
                           </td>
                           <td><%= b.venue ? b.venue.name : 'N/A' %></td>
                           <td>
                             <div><%= formatDateDisplay(b.bookingDate) %></div>
-                            <small class="badge bg-light text-dark border"><%= b.startTime %> – <%= b.endTime %></small>
+                            <span class="badge rounded-pill" style="background: rgba(255,255,255,0.06); color: var(--admin-text-secondary); font-size: 0.72rem;"><%= b.startTime %> – <%= b.endTime %></span>
                           </td>
                           <td class="text-end">
-                            <a href="/admin/bookings/<%= b._id %>" class="btn btn-sm btn-primary-custom">
-                              Review
-                            </a>
+                            <a href="/admin/bookings/<%= b._id %>" class="btn btn-sm btn-primary-custom">Review</a>
                           </td>
                         </tr>
                       <% }); %>
@@ -129,10 +121,10 @@
                   </table>
                 </div>
               <% } else { %>
-                <div class="p-5 text-center my-auto">
-                  <div class="stat-icon success mx-auto mb-2" style="width: 48px; height: 48px; font-size: 1.25rem;">✓</div>
-                  <h6 class="fw-bold text-dark mb-1">No Pending Requests</h6>
-                  <p class="text-muted small mb-0">All booking requests have been reviewed.</p>
+                <div class="empty-state">
+                  <div class="empty-state-icon success">✓</div>
+                  <h6 class="fw-bold mb-1">No Pending Requests</h6>
+                  <p class="small mb-0" style="color: var(--admin-text-muted);">All booking requests have been reviewed.</p>
                 </div>
               <% } %>
             </div>
@@ -140,11 +132,11 @@
 
           <!-- Today's Events Schedule -->
           <div class="col-lg-5">
-            <div class="card card-custom border-0 shadow-sm h-100">
-              <div class="card-header bg-white border-bottom p-4 d-flex justify-content-between align-items-center">
+            <div class="card card-custom border-0 h-100">
+              <div class="card-header border-bottom p-4 d-flex justify-content-between align-items-center">
                 <div>
-                  <h5 class="fw-bold text-dark mb-0">Today's Campus Events</h5>
-                  <small class="text-muted">Happening today on campus</small>
+                  <h5 class="fw-bold mb-0">Today's Campus Events</h5>
+                  <small style="color: var(--admin-text-muted);">Happening today on campus</small>
                 </div>
                 <a href="/admin/events/today" class="btn btn-sm btn-outline-custom">Full Schedule</a>
               </div>
@@ -152,23 +144,23 @@
               <% if (todayEvents && todayEvents.length > 0) { %>
                 <div class="p-4 d-flex flex-column gap-3">
                   <% todayEvents.forEach(function(ev) { %>
-                    <div class="p-3 bg-light rounded-3 d-flex justify-content-between align-items-center">
+                    <div class="p-3 rounded-3 d-flex justify-content-between align-items-center" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
                       <div>
-                        <div class="fw-bold text-dark"><%= ev.eventName %></div>
-                        <small class="text-muted">🏛️ <%= ev.venue ? ev.venue.name : 'N/A' %> | 👤 <%= ev.organiser ? ev.organiser.name : 'Organiser' %></small>
+                        <div class="fw-bold"><%= ev.eventName %></div>
+                        <small style="color: var(--admin-text-muted);">🏛️ <%= ev.venue ? ev.venue.name : 'N/A' %> | 👤 <%= ev.organiser ? ev.organiser.name : 'Organiser' %></small>
                       </div>
                       <div class="text-end">
-                        <span class="badge bg-primary text-white"><%= ev.startTime %> – <%= ev.endTime %></span>
-                        <div class="small text-capitalize text-muted mt-1"><%= ev.status %></div>
+                        <span class="badge rounded-pill" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; font-size: 0.72rem;"><%= ev.startTime %> – <%= ev.endTime %></span>
+                        <div class="small mt-1" style="color: var(--admin-text-muted); text-transform: capitalize;"><%= ev.status %></div>
                       </div>
                     </div>
                   <% }); %>
                 </div>
               <% } else { %>
-                <div class="p-5 text-center my-auto">
-                  <div class="stat-icon info mx-auto mb-2" style="width: 48px; height: 48px; font-size: 1.25rem;">📅</div>
-                  <h6 class="fw-bold text-dark mb-1">No Events Today</h6>
-                  <p class="text-muted small mb-0">No approved events are scheduled for today.</p>
+                <div class="empty-state">
+                  <div class="empty-state-icon info">📅</div>
+                  <h6 class="fw-bold mb-1">No Events Today</h6>
+                  <p class="small mb-0" style="color: var(--admin-text-muted);">No approved events are scheduled for today.</p>
                 </div>
               <% } %>
             </div>
@@ -179,11 +171,11 @@
         <div class="row g-4">
           <!-- Upcoming Events -->
           <div class="col-lg-6">
-            <div class="card card-custom border-0 shadow-sm h-100">
-              <div class="card-header bg-white border-bottom p-4 d-flex justify-content-between align-items-center">
+            <div class="card card-custom border-0 h-100">
+              <div class="card-header border-bottom p-4 d-flex justify-content-between align-items-center">
                 <div>
-                  <h5 class="fw-bold text-dark mb-0">Upcoming Approved Events</h5>
-                  <small class="text-muted">Confirmed future bookings</small>
+                  <h5 class="fw-bold mb-0">Upcoming Approved Events</h5>
+                  <small style="color: var(--admin-text-muted);">Confirmed future bookings</small>
                 </div>
                 <a href="/admin/events/upcoming" class="btn btn-sm btn-outline-custom">View All</a>
               </div>
@@ -202,13 +194,13 @@
                       <% upcomingEvents.forEach(function(ev) { %>
                         <tr>
                           <td>
-                            <div class="fw-bold text-dark"><%= ev.eventName %></div>
-                            <small class="text-muted"><%= ev.organiser ? ev.organiser.name : 'N/A' %></small>
+                            <div class="fw-bold"><%= ev.eventName %></div>
+                            <small style="color: var(--admin-text-muted);"><%= ev.organiser ? ev.organiser.name : 'N/A' %></small>
                           </td>
                           <td><%= ev.venue ? ev.venue.name : 'N/A' %></td>
                           <td>
                             <div><%= formatDateDisplay(ev.bookingDate) %></div>
-                            <small class="badge bg-light text-dark border"><%= ev.startTime %> – <%= ev.endTime %></small>
+                            <span class="badge rounded-pill" style="background: rgba(255,255,255,0.06); color: var(--admin-text-secondary); font-size: 0.72rem;"><%= ev.startTime %> – <%= ev.endTime %></span>
                           </td>
                         </tr>
                       <% }); %>
@@ -216,26 +208,26 @@
                   </table>
                 </div>
               <% } else { %>
-                <div class="p-4 text-center text-muted small">No upcoming events scheduled.</div>
+                <div class="p-4 text-center small" style="color: var(--admin-text-muted);">No upcoming events scheduled.</div>
               <% } %>
             </div>
           </div>
 
           <!-- Recent Activity -->
           <div class="col-lg-6">
-            <div class="card card-custom border-0 shadow-sm h-100">
-              <div class="card-header bg-white border-bottom p-4">
-                <h5 class="fw-bold text-dark mb-0">Recent Activity</h5>
-                <small class="text-muted">Latest booking submissions and status updates</small>
+            <div class="card card-custom border-0 h-100">
+              <div class="card-header border-bottom p-4">
+                <h5 class="fw-bold mb-0">Recent Activity</h5>
+                <small style="color: var(--admin-text-muted);">Latest booking submissions and status updates</small>
               </div>
 
               <% if (recentActivity && recentActivity.length > 0) { %>
                 <div class="p-4 d-flex flex-column gap-2 overflow-auto" style="max-height: 320px;">
                   <% recentActivity.forEach(function(item) { %>
-                    <div class="p-2 border-bottom d-flex justify-content-between align-items-center small">
+                    <div class="p-3 rounded-3 d-flex justify-content-between align-items-center small" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04);">
                       <div>
                         <strong>"<%= item.eventName %>"</strong> in <%= item.venue ? item.venue.name : 'Venue' %>
-                        <div class="text-muted" style="font-size: 0.78rem;">By <%= item.organiser ? item.organiser.name : 'User' %> on <%= formatDateDisplay(item.updatedAt) %></div>
+                        <div style="font-size: 0.78rem; color: var(--admin-text-muted);">By <%= item.organiser ? item.organiser.name : 'User' %> on <%= formatDateDisplay(item.updatedAt) %></div>
                       </div>
                       <span class="badge badge-status badge-<%= item.status %>">
                         <%= item.status %>
@@ -244,7 +236,7 @@
                   <% }); %>
                 </div>
               <% } else { %>
-                <div class="p-4 text-center text-muted small">No recent activity recorded.</div>
+                <div class="p-4 text-center small" style="color: var(--admin-text-muted);">No recent activity recorded.</div>
               <% } %>
             </div>
           </div>

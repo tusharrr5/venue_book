@@ -3,6 +3,16 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Check if we are in the admin dark theme
+  const isDark = window.isDarkTheme === true;
+  
+  // Set default colors based on theme
+  const textColor = isDark ? '#cbd5e1' : '#64748b';
+  const gridColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)';
+
+  Chart.defaults.color = textColor;
+  Chart.defaults.font.family = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+
   // 1. Revenue by Venue Chart
   const revenueCtx = document.getElementById('revenueByVenueChart');
   if (revenueCtx && window.revenueData) {
@@ -14,8 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
           {
             label: 'Total Revenue (₹)',
             data: window.revenueData.map((d) => d.totalRevenue),
-            backgroundColor: 'rgba(79, 70, 229, 0.8)',
-            borderColor: '#4f46e5',
+            backgroundColor: isDark ? 'rgba(99, 102, 241, 0.85)' : 'rgba(79, 70, 229, 0.8)',
+            borderColor: isDark ? 'rgba(99, 102, 241, 1)' : '#4f46e5',
             borderWidth: 1,
             borderRadius: 6
           }
@@ -27,6 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
         plugins: {
           legend: { display: false },
           tooltip: {
+            backgroundColor: isDark ? 'rgba(15, 23, 42, 0.9)' : 'rgba(0, 0, 0, 0.8)',
+            titleColor: '#fff',
+            bodyColor: '#e2e8f0',
+            padding: 12,
+            cornerRadius: 8,
             callbacks: {
               label: (context) => `Revenue: ₹${context.raw.toLocaleString('en-IN')}`
             }
@@ -35,9 +50,15 @@ document.addEventListener('DOMContentLoaded', () => {
         scales: {
           y: {
             beginAtZero: true,
+            grid: { color: gridColor },
+            border: { display: false },
             ticks: {
               callback: (value) => `₹${value.toLocaleString('en-IN')}`
             }
+          },
+          x: {
+            grid: { display: false },
+            border: { display: false }
           }
         }
       }
@@ -61,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
               return 'rgba(245, 158, 11, 0.85)';
             }),
             borderWidth: 1,
+            borderColor: 'rgba(255,255,255,0.1)',
             borderRadius: 6
           }
         ]
@@ -72,6 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
         plugins: {
           legend: { display: false },
           tooltip: {
+            backgroundColor: isDark ? 'rgba(15, 23, 42, 0.9)' : 'rgba(0, 0, 0, 0.8)',
+            padding: 12,
+            cornerRadius: 8,
             callbacks: {
               label: (context) => `Utilisation: ${context.raw}%`
             }
@@ -81,9 +106,15 @@ document.addEventListener('DOMContentLoaded', () => {
           x: {
             beginAtZero: true,
             max: 100,
+            grid: { color: gridColor },
+            border: { display: false },
             ticks: {
               callback: (value) => `${value}%`
             }
+          },
+          y: {
+            grid: { display: false },
+            border: { display: false }
           }
         }
       }
