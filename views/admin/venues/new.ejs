@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/custom.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+  <%- include('../../partials/navbar') %>
+
+  <div class="container-fluid flex-grow-1">
+    <div class="row">
+      <div class="col-lg-2 p-0 d-none d-lg-block">
+        <%- include('../../partials/adminSidebar') %>
+      </div>
+
+      <div class="col-lg-10 p-4 p-md-5">
+        <%- include('../../partials/flash') %>
+
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <nav aria-label="breadcrumb" class="mb-4">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin/dashboard" class="text-decoration-none text-muted">Admin</a></li>
+                <li class="breadcrumb-item"><a href="/admin/venues" class="text-decoration-none text-muted">Venues</a></li>
+                <li class="breadcrumb-item active" aria-current="page">New Venue</li>
+              </ol>
+            </nav>
+
+            <div class="card card-custom p-4 p-md-5 border-0 shadow-sm">
+              <h2 class="fw-bold text-dark mb-1">Add New Campus Venue</h2>
+              <p class="text-muted small mb-4">Register a new room, hall, lab or auditorium in the campus booking system.</p>
+
+              <form action="/admin/venues" method="POST">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                <div class="mb-3">
+                  <label for="name" class="form-label fw-semibold small text-muted">Venue Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    value="<%= oldInput.name || '' %>"
+                    required
+                    placeholder="e.g. Einstein Seminar Hall"
+                  >
+                </div>
+
+                <div class="mb-3">
+                  <label for="location" class="form-label fw-semibold small text-muted">Campus Location / Block</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="location"
+                    name="location"
+                    value="<%= oldInput.location || '' %>"
+                    required
+                    placeholder="e.g. Science Complex, 2nd Floor, Room 204"
+                  >
+                </div>
+
+                <div class="mb-3">
+                  <label for="description" class="form-label fw-semibold small text-muted">Description</label>
+                  <textarea
+                    class="form-control"
+                    id="description"
+                    name="description"
+                    rows="3"
+                    required
+                    placeholder="Provide overview, ideal events, acoustic qualities, etc."
+                  ><%= oldInput.description || '' %></textarea>
+                </div>
+
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <label for="capacity" class="form-label fw-semibold small text-muted">Capacity (People)</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="capacity"
+                      name="capacity"
+                      value="<%= oldInput.capacity || '' %>"
+                      required
+                      min="1"
+                      placeholder="e.g. 150"
+                    >
+                  </div>
+                  <div class="col-md-6">
+                    <label for="hourlyRate" class="form-label fw-semibold small text-muted">Hourly Rate (₹)</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="hourlyRate"
+                      name="hourlyRate"
+                      value="<%= oldInput.hourlyRate || '' %>"
+                      required
+                      min="0"
+                      placeholder="e.g. 1500"
+                    >
+                  </div>
+                </div>
+
+                <div class="mb-4">
+                  <label for="imageUrl" class="form-label fw-semibold small text-muted">Image URL (Optional)</label>
+                  <input
+                    type="url"
+                    class="form-control"
+                    id="imageUrl"
+                    name="imageUrl"
+                    value="<%= oldInput.imageUrl || '' %>"
+                    placeholder="https://images.unsplash.com/..."
+                  >
+                  <small class="text-muted">Leave empty to use default campus venue image.</small>
+                </div>
+
+                <!-- Facilities Multi-select checkboxes -->
+                <div class="mb-4">
+                  <label class="form-label fw-semibold small text-muted mb-2">Facilities & Equipment Available</label>
+                  <div class="row g-2">
+                    <% allFacilities.forEach(function(fac) { %>
+                      <div class="col-sm-6 col-md-4">
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            name="facilities"
+                            value="<%= fac %>"
+                            id="fac_<%= fac.replace(/[^a-zA-Z0-9]/g, '_') %>"
+                          >
+                          <label class="form-check-label small" for="fac_<%= fac.replace(/[^a-zA-Z0-9]/g, '_') %>">
+                            <%= fac %>
+                          </label>
+                        </div>
+                      </div>
+                    <% }); %>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                  <a href="/admin/venues" class="btn btn-outline-custom">Cancel</a>
+                  <button type="submit" class="btn btn-primary-custom px-4 py-2">
+                    Create Venue
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../../partials/footer') %>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

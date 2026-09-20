@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/custom.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+  <%- include('../partials/navbar') %>
+
+  <main class="container py-5">
+    <%- include('../partials/flash') %>
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-muted">Home</a></li>
+        <li class="breadcrumb-item"><a href="/venues" class="text-decoration-none text-muted">Venues</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><%= venue.name %></li>
+      </ol>
+    </nav>
+
+    <div class="row g-4">
+      <!-- Venue Main Info -->
+      <div class="col-lg-8">
+        <div class="card card-custom overflow-hidden border-0 shadow-sm mb-4">
+          <img
+            src="<%= venue.imageUrl %>"
+            alt="<%= venue.name %>"
+            style="height: 380px; width: 100%; object-fit: cover;"
+            onerror="this.src='https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1200&q=80'"
+          >
+          <div class="p-4 p-md-5">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+              <div>
+                <h1 class="fw-bold text-dark mb-1"><%= venue.name %></h1>
+                <p class="text-muted mb-0">📍 <%= venue.location %></p>
+              </div>
+              <span class="badge badge-status <%= venue.status === 'active' ? 'badge-active' : 'badge-inactive' %> fs-6 px-3 py-2">
+                <%= venue.status %>
+              </span>
+            </div>
+
+            <hr class="my-4">
+
+            <h5 class="fw-bold text-dark mb-3">About This Venue</h5>
+            <p class="text-muted" style="line-height: 1.7;">
+              <%= venue.description %>
+            </p>
+
+            <h5 class="fw-bold text-dark mt-4 mb-3">Available Facilities & Equipment</h5>
+            <div class="d-flex flex-wrap gap-2">
+              <% (venue.facilities || []).forEach(function(facility) { %>
+                <span class="facility-pill py-2 px-3 fs-6">
+                  <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20" class="text-success">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                  </svg>
+                  <%= facility %>
+                </span>
+              <% }); %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Schedule / Availability Checker -->
+        <div class="card card-custom p-4 border-0 shadow-sm">
+          <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
+            <div>
+              <h5 class="fw-bold text-dark mb-1">Schedule & Availability</h5>
+              <p class="text-muted small mb-0">Check existing bookings & maintenance windows for any date</p>
+            </div>
+
+            <form action="/venues/<%= venue._id %>" method="GET" class="d-flex align-items-center gap-2">
+              <input
+                type="date"
+                name="date"
+                class="form-control form-control-sm"
+                value="<%= selectedDate %>"
+                onchange="this.form.submit()"
+              >
+            </form>
+          </div>
+
+          <div class="p-3 bg-light rounded-3 mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="fw-semibold text-dark">Schedule for: <strong><%= formatDateDisplay(selectedDate) %></strong></span>
+              <span class="badge bg-secondary-subtle text-secondary small">Operating Hours: 08:00 - 22:00</span>
+            </div>
+          </div>
+
+          <% if (schedule && schedule.length > 0) { %>
+            <div class="table-responsive">
+              <table class="table table-custom">
+                <thead>
+                  <tr>
+                    <th>Time Interval</th>
+                    <th>Status</th>
+                    <th>Availability</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% schedule.forEach(function(item) { %>
+                    <tr>
+                      <td class="fw-semibold"><%= item.startTime %> – <%= item.endTime %></td>
+                      <td>
+                        <span class="badge <%= item.type === 'maintenance' ? 'bg-warning text-dark' : 'bg-danger text-white' %> rounded-pill px-2.5 py-1">
+                          <%= item.label %>
+                        </span>
+                      </td>
+                      <td class="text-muted small">Slot Unavailable</td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+            <p class="text-muted small mt-2 mb-0">
+              * Note: To protect organiser privacy, specific event titles and host details are kept confidential.
+            </p>
+          <% } else { %>
+            <div class="text-center py-4">
+              <div class="stat-icon success mx-auto mb-2" style="width: 48px; height: 48px; font-size: 1.25rem;">
+                ✓
+              </div>
+              <h6 class="fw-bold text-dark mb-1">Fully Available</h6>
+              <p class="text-muted small mb-0">There are no approved bookings or maintenance blocks scheduled on this date.</p>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Booking Sidebar Card -->
+      <div class="col-lg-4">
+        <div class="card card-custom p-4 border-0 shadow-sm sticky-top" style="top: 90px;">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-muted small fw-semibold text-uppercase">Pricing & Booking</span>
+            <span class="badge bg-success-subtle text-success">Instant Request</span>
+          </div>
+
+          <div class="mb-4">
+            <div class="display-6 fw-bold text-dark"><%= formatCurrency(venue.hourlyRate) %><span class="fs-6 text-muted fw-normal"> / hour</span></div>
+            <p class="text-muted small mb-0">Standard campus reservation tariff</p>
+          </div>
+
+          <div class="p-3 bg-light rounded-3 mb-4">
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted small">Maximum Capacity</span>
+              <span class="fw-bold text-dark small"><%= venue.capacity %> attendees</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted small">Operating Window</span>
+              <span class="fw-bold text-dark small">08:00 – 22:00</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="text-muted small">Venue Status</span>
+              <span class="fw-bold text-<%= venue.status === 'active' ? 'success' : 'danger' %> small text-capitalize"><%= venue.status %></span>
+            </div>
+          </div>
+
+          <% if (venue.status === 'active') { %>
+            <a href="/bookings/new/<%= venue._id %>?date=<%= selectedDate %>" class="btn btn-primary-custom w-100 py-3 fw-bold mb-2">
+              Request Booking For This Venue
+            </a>
+          <% } else { %>
+            <button class="btn btn-secondary w-100 py-3 fw-bold mb-2" disabled>
+              Venue Inactive (Cannot Book)
+            </button>
+          <% } %>
+
+          <p class="text-muted text-center small mb-0">
+            Booking requests require venue admin approval. Overlaps are strictly prevented.
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

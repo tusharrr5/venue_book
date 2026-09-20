@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/custom.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+  <%- include('../../partials/navbar') %>
+
+  <div class="container-fluid flex-grow-1">
+    <div class="row">
+      <div class="col-lg-2 p-0 d-none d-lg-block">
+        <%- include('../../partials/adminSidebar') %>
+      </div>
+
+      <div class="col-lg-10 p-4 p-md-5">
+        <%- include('../../partials/flash') %>
+
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+          <div>
+            <h1 class="fw-bold text-dark mb-1">Venue Maintenance Blocks</h1>
+            <p class="text-muted mb-0">Schedule downtime, repairs, renovations, or administrative blackouts across campus venues.</p>
+          </div>
+          <div>
+            <button type="button" class="btn btn-primary-custom d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#newBlockModal">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+              Schedule Maintenance Block
+            </button>
+          </div>
+        </div>
+
+        <!-- Blocks Table -->
+        <div class="card card-custom border-0 shadow-sm overflow-hidden">
+          <% if (blocks && blocks.length > 0) { %>
+            <div class="table-responsive">
+              <table class="table table-custom mb-0">
+                <thead>
+                  <tr>
+                    <th>Venue</th>
+                    <th>Date</th>
+                    <th>Time Interval</th>
+                    <th>Reason</th>
+                    <th>Scheduled By</th>
+                    <th class="text-end">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% blocks.forEach(function(b) { %>
+                    <tr>
+                      <td>
+                        <div class="fw-bold text-dark"><%= b.venue ? b.venue.name : 'Unknown Venue' %></div>
+                        <small class="text-muted">📍 <%= b.venue ? b.venue.location : '' %></small>
+                      </td>
+                      <td>
+                        <strong><%= formatDateDisplay(b.date) %></strong>
+                      </td>
+                      <td>
+                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">
+                          <%= b.startTime %> – <%= b.endTime %>
+                        </span>
+                      </td>
+                      <td>
+                        <span class="badge bg-light text-dark border"><%= b.reason %></span>
+                      </td>
+                      <td>
+                        <small class="text-muted"><%= b.createdBy ? b.createdBy.name : 'Admin' %></small>
+                      </td>
+                      <td class="text-end">
+                        <form action="/admin/blocks/<%= b._id %>?_method=DELETE" method="POST" class="d-inline">
+                          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                          <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Remove this maintenance block and restore venue availability?')">
+                            Remove
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          <% } else { %>
+            <div class="p-5 text-center">
+              <div class="stat-icon info mx-auto mb-2" style="width: 48px; height: 48px; font-size: 1.25rem;">🛠️</div>
+              <h6 class="fw-bold text-dark mb-1">No Active Maintenance Blocks</h6>
+              <p class="text-muted small mb-0">All venues are currently operating on their standard availability schedules.</p>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Maintenance Block Modal -->
+  <div class="modal fade" id="newBlockModal" tabindex="-1" aria-labelledby="newBlockModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <form action="/admin/blocks" method="POST">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <div class="modal-header border-bottom">
+            <h5 class="modal-title fw-bold text-dark" id="newBlockModalLabel">Schedule Maintenance Block</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-4">
+            <div class="mb-3">
+              <label for="venue" class="form-label fw-semibold small text-muted">Target Venue</label>
+              <select class="form-select" id="venue" name="venue" required>
+                <option value="">Select a venue...</option>
+                <% venues.forEach(function(v) { %>
+                  <option value="<%= v._id %>"><%= v.name %></option>
+                <% }); %>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="date" class="form-label fw-semibold small text-muted">Block Date</label>
+              <input
+                type="date"
+                class="form-control"
+                id="date"
+                name="date"
+                required
+                min="<%= todayDate %>"
+                value="<%= todayDate %>"
+              >
+            </div>
+
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label for="startTime" class="form-label fw-semibold small text-muted">Start Time</label>
+                <input type="time" class="form-control" id="startTime" name="startTime" required value="08:00">
+              </div>
+              <div class="col-6">
+                <label for="endTime" class="form-label fw-semibold small text-muted">End Time</label>
+                <input type="time" class="form-control" id="endTime" name="endTime" required value="14:00">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="reason" class="form-label fw-semibold small text-muted">Reason / Category</label>
+              <select class="form-select" id="reason" name="reason" required>
+                <% blockReasons.forEach(function(r) { %>
+                  <option value="<%= r %>"><%= r %></option>
+                <% }); %>
+              </select>
+            </div>
+
+            <div class="alert alert-light border small text-muted mb-0">
+              * Note: If any approved or pending bookings conflict with this scheduled block, a warning notification will be recorded in the system.
+            </div>
+          </div>
+          <div class="modal-footer border-top">
+            <button type="button" class="btn btn-outline-custom" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary-custom">Create Block</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../../partials/footer') %>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

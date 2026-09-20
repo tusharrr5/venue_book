@@ -1,0 +1,45 @@
+<footer>
+  <div class="container">
+    <div class="row g-4 mb-4">
+      <div class="col-lg-4 col-md-6">
+        <h5 class="fw-bold text-dark mb-2">Venue<span class="text-primary">Hub</span></h5>
+        <p class="text-muted small mb-3">
+          The centralized campus event and venue booking management platform. Providing seamless scheduling, clash-free reservations, and transparent space utilisation for university communities.
+        </p>
+        <span class="badge bg-light text-dark border">Campus Release v1.0</span>
+      </div>
+      <div class="col-lg-2 col-md-6">
+        <h6 class="fw-semibold text-dark mb-3">Quick Navigation</h6>
+        <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
+          <li><a href="/" class="text-decoration-none text-muted">Home</a></li>
+          <li><a href="/venues" class="text-decoration-none text-muted">Discover Venues</a></li>
+          <% if (isAuthenticated) { %>
+            <li><a href="<%= isAdmin ? '/admin/dashboard' : '/dashboard' %>" class="text-decoration-none text-muted">Dashboard</a></li>
+          <% } else { %>
+            <li><a href="/login" class="text-decoration-none text-muted">Sign In</a></li>
+            <li><a href="/register" class="text-decoration-none text-muted">Create Account</a></li>
+          <% } %>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <h6 class="fw-semibold text-dark mb-3">Campus Facilities</h6>
+        <ul class="list-unstyled small mb-0 d-flex flex-column gap-2 text-muted">
+          <li>Main Auditoriums & Halls</li>
+          <li>Tech & Innovation Labs</li>
+          <li>Smart Conference Suites</li>
+          <li>Open Amphitheatres</li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <h6 class="fw-semibold text-dark mb-3">Operating Window</h6>
+        <p class="text-muted small mb-1">Standard Campus Hours:</p>
+        <p class="fw-bold text-dark small mb-2">08:00 AM – 10:00 PM (Mon – Sun)</p>
+        <p class="text-muted small mb-0">Emergency Maintenance Support: <span class="text-primary">support@campushub.edu</span></p>
+      </div>
+    </div>
+    <div class="border-top pt-3 d-flex flex-column flex-sm-row justify-content-between align-items-center small text-muted">
+      <p class="mb-0">&copy; <%= new Date().getFullYear() %> VenueHub Management System. All rights reserved.</p>
+      <p class="mb-0 mt-2 mt-sm-0">Built with Node.js, Express, EJS & MongoDB</p>
+    </div>
+  </div>
+</footer>

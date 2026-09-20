@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/custom.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body class="d-flex flex-column min-vh-100">
+  <%- include('../../partials/navbar') %>
+
+  <div class="container-fluid flex-grow-1">
+    <div class="row">
+      <div class="col-lg-2 p-0 d-none d-lg-block">
+        <%- include('../../partials/adminSidebar') %>
+      </div>
+
+      <div class="col-lg-10 p-4 p-md-5">
+        <%- include('../../partials/flash') %>
+
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+          <div>
+            <h1 class="fw-bold text-dark mb-1">Revenue & Space Utilisation Analytics</h1>
+            <p class="text-muted mb-0">Financial yield and venue efficiency metrics across campus facilities.</p>
+          </div>
+
+          <!-- Period Filter Selector -->
+          <div class="d-flex align-items-center gap-2">
+            <span class="text-muted small fw-semibold">Reporting Period:</span>
+            <div class="btn-group btn-group-sm" role="group">
+              <a href="/admin/reports?days=7" class="btn <%= selectedDays === 7 ? 'btn-primary' : 'btn-outline-secondary' %>">7 Days</a>
+              <a href="/admin/reports?days=30" class="btn <%= selectedDays === 30 ? 'btn-primary' : 'btn-outline-secondary' %>">30 Days</a>
+              <a href="/admin/reports?days=90" class="btn <%= selectedDays === 90 ? 'btn-primary' : 'btn-outline-secondary' %>">90 Days</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI Summary Cards -->
+        <div class="row g-3 mb-4">
+          <div class="col-sm-6 col-xl-3">
+            <div class="stat-card">
+              <div class="stat-icon success">💰</div>
+              <div>
+                <div class="stat-value"><%= formatCurrency(revenue.totalRevenue) %></div>
+                <div class="stat-label">Total Revenue (Completed)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-xl-3">
+            <div class="stat-card">
+              <div class="stat-icon primary">📈</div>
+              <div>
+                <div class="stat-value"><%= formatCurrency(revenue.monthRevenue) %></div>
+                <div class="stat-label">Revenue This Month</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-xl-3">
+            <div class="stat-card">
+              <div class="stat-icon info">⚡</div>
+              <div>
+                <div class="stat-value"><%= utilisation.overallUtilisation %>%</div>
+                <div class="stat-label">Campus Utilisation Rate</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-xl-3">
+            <div class="stat-card">
+              <div class="stat-icon warning">🕒</div>
+              <div>
+                <div class="stat-value"><%= utilisation.operatingHoursPerDay %>h / day</div>
+                <div class="stat-label">Standard Operating Hours</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 1: Revenue Analytics -->
+        <div class="row g-4 mb-5">
+          <!-- Chart -->
+          <div class="col-lg-6">
+            <div class="card card-custom p-4 border-0 shadow-sm h-100">
+              <h5 class="fw-bold text-dark mb-1">Revenue Breakdown by Venue</h5>
+              <p class="text-muted small mb-3">Total earnings from completed events per venue</p>
+              <div style="height: 300px; position: relative;">
+                <canvas id="revenueByVenueChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Revenue by Venue Table -->
+          <div class="col-lg-6">
+            <div class="card card-custom border-0 shadow-sm h-100 overflow-hidden">
+              <div class="card-header bg-white border-bottom p-4">
+                <h5 class="fw-bold text-dark mb-0">Venue Revenue Summary</h5>
+                <small class="text-muted">Ranked by highest yielding campus spaces</small>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-custom mb-0">
+                  <thead>
+                    <tr>
+                      <th>Venue</th>
+                      <th>Completed Events</th>
+                      <th>Total Hours</th>
+                      <th class="text-end">Revenue</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (revenue.revenueByVenue && revenue.revenueByVenue.length > 0) { %>
+                      <% revenue.revenueByVenue.forEach(function(item) { %>
+                        <tr>
+                          <td>
+                            <div class="fw-bold text-dark"><%= item.venueName %></div>
+                            <small class="text-muted">📍 <%= item.location %></small>
+                          </td>
+                          <td><strong><%= item.completedBookings %></strong></td>
+                          <td><%= item.totalHours %> hrs</td>
+                          <td class="text-end fw-bold text-success"><%= formatCurrency(item.totalRevenue) %></td>
+                        </tr>
+                      <% }); %>
+                    <% } else { %>
+                      <tr>
+                        <td colspan="4" class="text-center py-4 text-muted small">No completed events to calculate revenue.</td>
+                      </tr>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Venue Utilisation Analytics -->
+        <div class="card card-custom border-0 shadow-sm p-4 mb-4">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+            <div>
+              <h4 class="fw-bold text-dark mb-1">Venue Utilisation Metrics</h4>
+              <p class="text-muted small mb-0">
+                Evaluation Period: <strong><%= selectedDays %> days</strong> | Formula:
+                <code>Utilisation % = (Completed/Approved Booked Hours ÷ Available Venue Hours) × 100</code>
+              </p>
+            </div>
+          </div>
+
+          <div class="alert alert-light border small text-muted mb-4">
+            <strong>Documentation Note:</strong> Available hours are calculated using the campus operating window of <strong>14 hours per day (08:00 to 22:00)</strong> over <%= selectedDays %> days (= <%= selectedDays * 14 %> hours per venue). Booked hours represent approved and completed event reservations.
+          </div>
+
+          <div class="row g-4 mb-4">
+            <div class="col-lg-6">
+              <div style="height: 320px; position: relative;">
+                <canvas id="venueUtilisationChart"></canvas>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="table-responsive">
+                <table class="table table-custom mb-0">
+                  <thead>
+                    <tr>
+                      <th>Venue</th>
+                      <th>Booked Hours</th>
+                      <th>Utilisation %</th>
+                      <th class="text-end">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% utilisation.venues.forEach(function(v) { %>
+                      <tr>
+                        <td>
+                          <div class="fw-bold text-dark"><%= v.venueName %></div>
+                          <small class="text-muted"><%= v.eventCount %> events</small>
+                        </td>
+                        <td><%= v.bookedHours %> / <%= v.availableHours %> hrs</td>
+                        <td>
+                          <div class="d-flex align-items-center gap-2">
+                            <div class="progress flex-grow-1" style="height: 8px;">
+                              <div
+                                class="progress-bar <%= v.utilisationPercent >= 70 ? 'bg-success' : v.utilisationPercent >= 35 ? 'bg-info' : 'bg-warning' %>"
+                                role="progressbar"
+                                style="width: <%= v.utilisationPercent %>%;"
+                                aria-valuenow="<%= v.utilisationPercent %>"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                              ></div>
+                            </div>
+                            <span class="fw-bold small"><%= v.utilisationPercent %>%</span>
+                          </div>
+                        </td>
+                        <td class="text-end">
+                          <span class="badge badge-status <%= v.status === 'active' ? 'badge-active' : 'badge-inactive' %>">
+                            <%= v.status %>
+                          </span>
+                        </td>
+                      </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Pass server data to client Chart.js script
+    window.revenueData = <%- JSON.stringify(revenue.revenueByVenue) %>;
+    window.utilisationData = <%- JSON.stringify(utilisation.venues) %>;
+  </script>
+
+  <%- include('../../partials/footer') %>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/charts.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>
